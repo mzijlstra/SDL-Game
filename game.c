@@ -2,6 +2,11 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_stdinc.h>
 
+#define SCREEN_WIDTH 480
+#define SCREEN_HEIGHT 270
+#define PLAYER_WIDTH 24
+#define PLAYER_HEIGHT 16
+
 int main() {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         SDL_Log("SDL_Init Error: %s\n", SDL_GetError());
@@ -9,9 +14,9 @@ int main() {
     }
     atexit(SDL_Quit);
 
-    SDL_Window *win =
-        SDL_CreateWindow("Hello World!", SDL_WINDOWPOS_CENTERED,
-                         SDL_WINDOWPOS_CENTERED, 480, 270, SDL_WINDOW_SHOWN);
+    SDL_Window *win = SDL_CreateWindow("Hello World!", SDL_WINDOWPOS_CENTERED,
+                                       SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH,
+                                       SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     if (win == NULL) {
         SDL_Log("SDL_CreateWindow Error: %s\n", SDL_GetError());
         return 1;
@@ -39,14 +44,14 @@ int main() {
     SDL_Rect srect;
     srect.x = 24;
     srect.y = 32;
-    srect.w = 24;
-    srect.h = 16;
+    srect.w = PLAYER_WIDTH;
+    srect.h = PLAYER_HEIGHT;
     SDL_Rect drect;
     drect.x = 100;
     drect.y = 100;
-    drect.w = 24;
-    drect.h = 16;
-    
+    drect.w = PLAYER_WIDTH;
+    drect.h = PLAYER_HEIGHT;
+
     SDL_bool player_up = SDL_FALSE;
     SDL_bool player_down = SDL_FALSE;
     SDL_bool player_left = SDL_FALSE;
@@ -130,14 +135,26 @@ int main() {
 
         if (player_up) {
             drect.y -= 1;
+            if (drect.y < 0) {
+                drect.y = 0;
+            }
         } else if (player_down) {
             drect.y += 1;
+            if (drect.y > SCREEN_HEIGHT - PLAYER_HEIGHT) {
+                drect.y = SCREEN_HEIGHT - PLAYER_HEIGHT;
+            }
         }
 
         if (player_left) {
             drect.x -= 1;
+            if (drect.x < 0) {
+                drect.x = 0;
+            }
         } else if (player_right) {
             drect.x += 1;
+            if (drect.x > SCREEN_WIDTH - PLAYER_WIDTH) {
+                drect.x = SCREEN_WIDTH - PLAYER_WIDTH;
+            }
         }
 
         // First clear the renderer
