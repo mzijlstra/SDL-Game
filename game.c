@@ -6,6 +6,24 @@
 #define SCREEN_HEIGHT 270
 #define PLAYER_WIDTH 24
 #define PLAYER_HEIGHT 16
+#define PLAYER_FLAME_FRAMES 2
+
+typedef struct PlayerAction {
+    SDL_bool up;
+    SDL_bool down;
+    SDL_bool left;
+    SDL_bool right;
+    SDL_bool fire;
+} PlayerAction;
+
+typedef struct Player {
+    PlayerAction action;
+    SDL_Rect sprite;
+    SDL_Rect location;
+} Player;
+
+
+
 
 int main() {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -41,21 +59,19 @@ int main() {
     }
     SDL_FreeSurface(img);
 
-    SDL_Rect srect;
-    srect.x = 24;
-    srect.y = 32;
-    srect.w = PLAYER_WIDTH;
-    srect.h = PLAYER_HEIGHT;
-    SDL_Rect drect;
-    drect.x = 100;
-    drect.y = 100;
-    drect.w = PLAYER_WIDTH;
-    drect.h = PLAYER_HEIGHT;
-
-    SDL_bool player_up = SDL_FALSE;
-    SDL_bool player_down = SDL_FALSE;
-    SDL_bool player_left = SDL_FALSE;
-    SDL_bool player_right = SDL_FALSE;
+    Player player;
+    player.action.up = SDL_FALSE;
+    player.action.down = SDL_FALSE;
+    player.action.left = SDL_FALSE;
+    player.action.right = SDL_FALSE;
+    player.sprite.x = 24;
+    player.sprite.y = 32;
+    player.sprite.w = PLAYER_WIDTH;
+    player.sprite.h = PLAYER_HEIGHT;
+    player.location.x = 100;
+    player.location.y = 100;
+    player.location.w = PLAYER_WIDTH;
+    player.location.h = PLAYER_HEIGHT;
 
     SDL_SetRenderDrawColor(ren, 200, 200, 200, 255);
     SDL_bool running = SDL_TRUE;
@@ -80,19 +96,19 @@ int main() {
 
                 case SDLK_UP:
                 case SDLK_w:
-                    player_up = SDL_TRUE;
+                    player.action.up = SDL_TRUE;
                     break;
                 case SDLK_RIGHT:
                 case SDLK_d:
-                    player_right = SDL_TRUE;
+                    player.action.right = SDL_TRUE;
                     break;
                 case SDLK_DOWN:
                 case SDLK_s:
-                    player_down = SDL_TRUE;
+                    player.action.down = SDL_TRUE;
                     break;
                 case SDLK_LEFT:
                 case SDLK_a:
-                    player_left = SDL_TRUE;
+                    player.action.left = SDL_TRUE;
                     break;
                 default:
                     break;
@@ -103,19 +119,19 @@ int main() {
                 switch (event.key.keysym.sym) {
                 case SDLK_UP:
                 case SDLK_w:
-                    player_up = SDL_FALSE;
+                    player.action.up = SDL_FALSE;
                     break;
                 case SDLK_RIGHT:
                 case SDLK_d:
-                    player_right = SDL_FALSE;
+                    player.action.right = SDL_FALSE;
                     break;
                 case SDLK_DOWN:
                 case SDLK_s:
-                    player_down = SDL_FALSE;
+                    player.action.down = SDL_FALSE;
                     break;
                 case SDLK_LEFT:
                 case SDLK_a:
-                    player_left = SDL_FALSE;
+                    player.action.left = SDL_FALSE;
                     break;
                 default:
                     break;
@@ -133,34 +149,34 @@ int main() {
             }
         }
 
-        if (player_up) {
-            drect.y -= 1;
-            if (drect.y < 0) {
-                drect.y = 0;
+        if (player.action.up) {
+            player.location.y -= 1;
+            if (player.location.y < 0) {
+                player.location.y = 0;
             }
-        } else if (player_down) {
-            drect.y += 1;
-            if (drect.y > SCREEN_HEIGHT - PLAYER_HEIGHT) {
-                drect.y = SCREEN_HEIGHT - PLAYER_HEIGHT;
+        } else if (player.action.down) {
+            player.location.y += 1;
+            if (player.location.y > SCREEN_HEIGHT - PLAYER_HEIGHT) {
+                player.location.y = SCREEN_HEIGHT - PLAYER_HEIGHT;
             }
         }
 
-        if (player_left) {
-            drect.x -= 1;
-            if (drect.x < 0) {
-                drect.x = 0;
+        if (player.action.left) {
+            player.location.x -= 1;
+            if (player.location.x < 0) {
+                player.location.x = 0;
             }
-        } else if (player_right) {
-            drect.x += 1;
-            if (drect.x > SCREEN_WIDTH - PLAYER_WIDTH) {
-                drect.x = SCREEN_WIDTH - PLAYER_WIDTH;
+        } else if (player.action.right) {
+            player.location.x += 1;
+            if (player.location.x > SCREEN_WIDTH - PLAYER_WIDTH) {
+                player.location.x = SCREEN_WIDTH - PLAYER_WIDTH;
             }
         }
 
         // First clear the renderer
         SDL_RenderClear(ren);
         // Draw the texture
-        SDL_RenderCopy(ren, tex, &srect, &drect);
+        SDL_RenderCopy(ren, tex, &player.sprite, &player.location);
         // Update the screen
         SDL_RenderPresent(ren);
 
