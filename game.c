@@ -18,7 +18,7 @@ int main() {
     }
 
     SDL_Renderer *ren = SDL_CreateRenderer(
-        win, -1, SDL_RENDERER_ACCELERATED); // | SDL_RENDERER_PRESENTVSYNC 
+        win, -1, SDL_RENDERER_ACCELERATED); // | SDL_RENDERER_PRESENTVSYNC
     if (ren == NULL) {
         SDL_Log("SDL_CreateRenderer Error: %s\n", SDL_GetError());
         return 1;
@@ -46,6 +46,11 @@ int main() {
     drect.y = 100;
     drect.w = 24;
     drect.h = 16;
+    
+    SDL_bool player_up = SDL_FALSE;
+    SDL_bool player_down = SDL_FALSE;
+    SDL_bool player_left = SDL_FALSE;
+    SDL_bool player_right = SDL_FALSE;
 
     SDL_SetRenderDrawColor(ren, 200, 200, 200, 255);
     SDL_bool running = SDL_TRUE;
@@ -63,9 +68,55 @@ int main() {
                 running = SDL_FALSE;
                 break;
             case SDL_KEYDOWN:
+                switch (event.key.keysym.sym) {
+                case SDLK_ESCAPE:
+                    running = SDL_FALSE;
+                    break;
+
+                case SDLK_UP:
+                case SDLK_w:
+                    player_up = SDL_TRUE;
+                    break;
+                case SDLK_RIGHT:
+                case SDLK_d:
+                    player_right = SDL_TRUE;
+                    break;
+                case SDLK_DOWN:
+                case SDLK_s:
+                    player_down = SDL_TRUE;
+                    break;
+                case SDLK_LEFT:
+                case SDLK_a:
+                    player_left = SDL_TRUE;
+                    break;
+                default:
+                    break;
+                }
                 break;
+
             case SDL_KEYUP:
+                switch (event.key.keysym.sym) {
+                case SDLK_UP:
+                case SDLK_w:
+                    player_up = SDL_FALSE;
+                    break;
+                case SDLK_RIGHT:
+                case SDLK_d:
+                    player_right = SDL_FALSE;
+                    break;
+                case SDLK_DOWN:
+                case SDLK_s:
+                    player_down = SDL_FALSE;
+                    break;
+                case SDLK_LEFT:
+                case SDLK_a:
+                    player_left = SDL_FALSE;
+                    break;
+                default:
+                    break;
+                }
                 break;
+
             case SDL_MOUSEMOTION:
                 break;
             case SDL_MOUSEBUTTONDOWN:
@@ -75,6 +126,18 @@ int main() {
             default:
                 break;
             }
+        }
+
+        if (player_up) {
+            drect.y -= 1;
+        } else if (player_down) {
+            drect.y += 1;
+        }
+
+        if (player_left) {
+            drect.x -= 1;
+        } else if (player_right) {
+            drect.x += 1;
         }
 
         // First clear the renderer
