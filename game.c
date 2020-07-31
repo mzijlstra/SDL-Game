@@ -14,6 +14,8 @@ typedef struct PlayerAction {
     SDL_bool left;
     SDL_bool right;
     SDL_bool fire;
+    uint8_t up_count;
+    uint8_t down_count;
 } PlayerAction;
 
 typedef struct Player {
@@ -21,9 +23,6 @@ typedef struct Player {
     SDL_Rect sprite;
     SDL_Rect location;
 } Player;
-
-
-
 
 int main() {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -64,6 +63,8 @@ int main() {
     player.action.down = SDL_FALSE;
     player.action.left = SDL_FALSE;
     player.action.right = SDL_FALSE;
+    player.action.up_count = 0;
+    player.action.down_count = 0;
     player.sprite.x = 24;
     player.sprite.y = 32;
     player.sprite.w = PLAYER_WIDTH;
@@ -93,7 +94,9 @@ int main() {
                 case SDLK_ESCAPE:
                     running = SDL_FALSE;
                     break;
-
+                case SDLK_f:
+                    SDL_SetWindowFullscreen(win, SDL_WINDOW_FULLSCREEN_DESKTOP);
+                    break;
                 case SDLK_UP:
                 case SDLK_w:
                     player.action.up = SDL_TRUE;
@@ -120,6 +123,7 @@ int main() {
                 case SDLK_UP:
                 case SDLK_w:
                     player.action.up = SDL_FALSE;
+                    player.action.up_count = 0;
                     break;
                 case SDLK_RIGHT:
                 case SDLK_d:
@@ -128,6 +132,7 @@ int main() {
                 case SDLK_DOWN:
                 case SDLK_s:
                     player.action.down = SDL_FALSE;
+                    player.action.down_count = 0;
                     break;
                 case SDLK_LEFT:
                 case SDLK_a:
@@ -150,27 +155,55 @@ int main() {
         }
 
         if (player.action.up) {
+            // move ship
             player.location.y -= 1;
             if (player.location.y < 0) {
                 player.location.y = 0;
             }
+            // tilt ship
+            player.action.up_count += 1;
+            if (player.action.up_count > 15) {
+                player.sprite.y = 0;
+            } else {
+                player.sprite.y = 16;
+            }
         } else if (player.action.down) {
+            // move ship
             player.location.y += 1;
             if (player.location.y > SCREEN_HEIGHT - PLAYER_HEIGHT) {
                 player.location.y = SCREEN_HEIGHT - PLAYER_HEIGHT;
             }
+            // tilt ship
+            player.action.down_count += 1;
+            if (player.action.down_count > 15) {
+                player.sprite.y = 64;
+            } else {
+                player.sprite.y = 48;
+            }
+        } else {
+            player.sprite.y = 32;
         }
 
         if (player.action.left) {
+            // move ship
             player.location.x -= 1;
             if (player.location.x < 0) {
                 player.location.x = 0;
             }
+            // set ship flame
+            player.sprite.x = 72;
         } else if (player.action.right) {
+            // move ship
             player.location.x += 1;
             if (player.location.x > SCREEN_WIDTH - PLAYER_WIDTH) {
                 player.location.x = SCREEN_WIDTH - PLAYER_WIDTH;
             }
+            // set ship flame
+            if (frame_count % 5 == 0) {
+                player.sprite.x = (player.sprite.x + PLAYER_WIDTH) % 48;
+            }
+        } else {
+            player.sprite.x = 48;
         }
 
         // First clear the renderer
