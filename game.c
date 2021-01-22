@@ -8,8 +8,8 @@
 typedef struct Window {
     unsigned int mode;
     unsigned int pixel_size;
-    unsigned int width;
-    unsigned int height;
+    int width;
+    int height;
     SDL_Window *ptr;
     SDL_Renderer *renderer;
 } Window;
@@ -185,13 +185,16 @@ int main() {
     initPlayer(&player, &window);
 
     SDL_bool running = SDL_TRUE;
-    unsigned int frame_time = 10;
-    unsigned int time = SDL_GetTicks();
-    unsigned int second = time + 1000;
-    unsigned int frame_count = 0;
-    unsigned int start_tick, stop_tick;
+    unsigned int frame_time = 10; // 10 milisecs per frame
+    unsigned long frame_count = 0;
+    unsigned int secs = 0;
+    unsigned int fps = 0;
+    unsigned int start_time = SDL_GetTicks();
+    // unsigned int second = time + 1000;
+    // unsigned int start_tick, stop_tick;
+    unsigned int frame_start, frame_stop;
     while (running) {
-        start_tick = SDL_GetTicks();
+        frame_start = SDL_GetTicks();
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
@@ -390,18 +393,27 @@ int main() {
         // Update the screen
         SDL_RenderPresent(window.renderer);
 
-        while (SDL_GetTicks() < start_tick + frame_time) {
-            SDL_Delay(1);
+
+        frame_stop = SDL_GetTicks();
+        unsigned int target_frames = (frame_stop - start_time) / 10;
+
+        // only pause if we're on track for 100 fps
+        if (frame_count >= target_frames) {
+            while (frame_stop - frame_start < frame_time) {
+                SDL_Delay(1);
+                frame_stop = SDL_GetTicks();
+            }
         }
+
         frame_count += 1;
-        if (SDL_GetTicks() > second) {
-            second += 1000;
-            // SDL_Log("Frames: %d\n", frame_count);
-            frame_count = 0;
+        fps += 1;
+        if ( (frame_stop - start_time) / 1000 > secs) {
+            secs += 1;
+            SDL_Log("FPS: %d\n", fps);
+            fps = 0;
         }
-        stop_tick = SDL_GetTicks();
-        if (stop_tick - start_tick > frame_time + 2) {
-            SDL_Log("Big frame size %d\n", stop_tick - start_tick);
+        if (frame_stop - frame_start > frame_time + 2) {
+            SDL_Log("Big Frame: %d millisecs\n", frame_stop - frame_start);
         }
     }
     return 0;
