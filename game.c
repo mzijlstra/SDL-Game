@@ -43,10 +43,10 @@ typedef struct PlayerVelocity {
     double y;
 } PlayerVelocity;
 
-typedef struct PlayerTimer {
+typedef struct PlayerAnim {
     uint8_t up_count;
     uint8_t down_count;
-} PlayerTimer;
+} PlayerAnim;
 
 typedef struct PlayerTexture {
     SDL_Texture *ship;
@@ -58,7 +58,7 @@ typedef struct Player {
     PlayerLocation location;
     PlayerAcceleration acceleration;
     PlayerVelocity velocity;
-    PlayerTimer timer;
+    PlayerAnim anim;
     PlayerTexture texture;
     SDL_Rect ship;
     SDL_Rect shipDest;
@@ -128,6 +128,10 @@ void initWindow(Window *window) {
         exit(1);
     }
 
+    int w, h;
+    SDL_GetWindowSize(window->ptr, &w, &h);
+    printf("Window size: %d %d\n", w, h);
+
     window->renderer = SDL_CreateRenderer(
         window->ptr, -1,
         SDL_RENDERER_ACCELERATED); // | SDL_RENDERER_PRESENTVSYNC
@@ -155,8 +159,8 @@ void initPlayer(Player *player, Window *window) {
     player->acceleration.boost = 1.3;
     player->velocity.x = 0;
     player->velocity.y = 0;
-    player->timer.up_count = 0;
-    player->timer.down_count = 0;
+    player->anim.up_count = 0;
+    player->anim.down_count = 0;
     player->texture.ship = loadTexture("assets/ship.png", window->renderer);
     player->texture.flame = loadTexture("assets/flame.png", window->renderer);
     player->ship.x = 0;
@@ -215,6 +219,13 @@ int main() {
                                                 SDL_WINDOW_FULLSCREEN_DESKTOP);
                         window.mode = SDL_WINDOW_FULLSCREEN_DESKTOP;
                         window.pixel_size = 4;
+
+                        int w, h;
+                        SDL_GetWindowSize(window.ptr, &w, &h);
+                        printf("Window size: %d %d\n", w, h);
+
+                        window.pixel_size = w / window.width;
+
                         player.shipDest.x *= window.pixel_size;
                         player.shipDest.y *= window.pixel_size;
                         player.shipDest.w *= window.pixel_size;
@@ -226,15 +237,17 @@ int main() {
                     } else if (window.mode == SDL_WINDOW_FULLSCREEN_DESKTOP) {
                         SDL_SetWindowFullscreen(window.ptr, 0);
                         window.mode = 0;
+
+                        player.shipDest.x /= window.pixel_size;
+                        player.shipDest.y /= window.pixel_size;
+                        player.shipDest.w /= window.pixel_size;
+                        player.shipDest.h /= window.pixel_size;
+                        player.flameDest.x /= window.pixel_size;
+                        player.flameDest.y /= window.pixel_size;
+                        player.flameDest.w /= window.pixel_size;
+                        player.flameDest.h /= window.pixel_size;
+
                         window.pixel_size = 1;
-                        player.shipDest.x /= 4;
-                        player.shipDest.y /= 4;
-                        player.shipDest.w /= 4;
-                        player.shipDest.h /= 4;
-                        player.flameDest.x /= 4;
-                        player.flameDest.y /= 4;
-                        player.flameDest.w /= 4;
-                        player.flameDest.h /= 4;
                     }
                     break;
                 case SDLK_UP:
@@ -266,7 +279,7 @@ int main() {
                 case SDLK_UP:
                 case SDLK_w:
                     player.action.up = SDL_FALSE;
-                    player.timer.up_count = 0;
+                    player.anim.up_count = 0;
                     break;
                 case SDLK_RIGHT:
                 case SDLK_d:
@@ -275,7 +288,7 @@ int main() {
                 case SDLK_DOWN:
                 case SDLK_s:
                     player.action.down = SDL_FALSE;
-                    player.timer.down_count = 0;
+                    player.anim.down_count = 0;
                     break;
                 case SDLK_LEFT:
                 case SDLK_a:
@@ -305,9 +318,9 @@ int main() {
             // move ship
             player.velocity.y -= player.acceleration.up;
             // tilt ship
-            player.timer.up_count += 1;
+            player.anim.up_count += 1;
             if (player.action.boost && player.action.right &&
-                player.timer.up_count > 15) {
+                player.anim.up_count > 15) {
                 player.ship.y = 0;
             } else {
                 player.ship.y = 16;
@@ -316,9 +329,9 @@ int main() {
             // move ship
             player.velocity.y += player.acceleration.down;
             // tilt ship
-            player.timer.down_count += 1;
+            player.anim.down_count += 1;
             if (player.action.boost && player.action.right &&
-                player.timer.down_count > 15) {
+                player.anim.down_count > 15) {
                 player.ship.y = 64;
             } else {
                 player.ship.y = 48;
