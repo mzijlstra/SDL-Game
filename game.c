@@ -393,9 +393,8 @@ int main() {
         // Update the screen
         SDL_RenderPresent(window.renderer);
 
-
         frame_stop = SDL_GetTicks();
-        unsigned int target_frames = (frame_stop - start_time) / 10;
+        unsigned int target_frames = (frame_stop - start_time) / frame_time;
 
         // only pause if we're on track for 100 fps
         if (frame_count >= target_frames) {
@@ -407,7 +406,7 @@ int main() {
 
         frame_count += 1;
         fps += 1;
-        if ( (frame_stop - start_time) / 1000 > secs) {
+        if ((frame_stop - start_time) / 1000 > secs) {
             secs += 1;
             SDL_Log("FPS: %d\n", fps);
             fps = 0;
