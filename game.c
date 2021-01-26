@@ -1,9 +1,31 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_stdinc.h>
+#include <string.h>
 
 #define PLAYER_WIDTH 16
 #define PLAYER_HEIGHT 16
+#define FRAME_TIME 10
+
+static SDL_bool show_fps;
+
+static void argFPS(int argc, char *argv[]) {
+    for (int i = 1; i < argc; i++) {
+        if (strcmp("fps", argv[i]) == 0) {
+            show_fps = SDL_TRUE;
+        }
+    }
+    show_fps = SDL_FALSE;
+}
+
+typedef struct Timing {
+    unsigned long frame_count;
+    unsigned int secs;
+    unsigned int fps;
+    unsigned int start_time;
+    unsigned int frame_start;
+    unsigned int frame_stop;
+} Timing;
 
 typedef struct Window {
     unsigned int mode;
@@ -131,9 +153,19 @@ void initWindow(Window *window) {
         exit(1);
     }
 
-    int w, h;
-    SDL_GetWindowSize(window->ptr, &w, &h);
-    printf("Window size: %d %d\n", w, h);
+    SDL_DisplayMode mode;
+    if (SDL_GetDesktopDisplayMode(0, &mode) != 0) {
+        SDL_Log("SDL_GetDesktopDisplayMode failed: %s", SDL_GetError());
+    }
+
+    SDL_Log("Desktop: %d x %d\n", mode.w, mode.h);
+
+    // set these to 1/4 of desktop resolution
+    window->width = mode.w / 4;
+    window->height = mode.h / 4;
+
+    SDL_SetWindowSize(window->ptr, mode.w / 4, mode.h / 4);
+    SDL_Log("Set window size: %d %d\n", mode.w / 4, mode.h / 4);
 
     window->renderer = SDL_CreateRenderer(
         window->ptr, -1,
@@ -185,6 +217,13 @@ void initPlayer(Player *player, Window *window) {
     player->flameDest.y = player->location.y * window->pixel_size;
     player->flameDest.w = PLAYER_WIDTH * window->pixel_size;
     player->flameDest.h = PLAYER_HEIGHT * window->pixel_size;
+}
+
+void initTiming(Timing *timing) {
+    timing->frame_count = 0;
+    timing->secs = 0;
+    timing->fps = 0;
+    timing->start_time = SDL_GetTicks();
 }
 
 void getEvents(PlayerAction *action, PlayerAnim *anim) {
@@ -279,7 +318,7 @@ void doUpdates(Player *player, Window *window) {
 
             int w, h;
             SDL_GetWindowSize(window->ptr, &w, &h);
-            printf("Window size: %d %d\n", w, h);
+            SDL_Log("Window size: %d %d\n", w, h);
 
             window->pixel_size = w / window->width;
 
@@ -390,66 +429,70 @@ void doUpdates(Player *player, Window *window) {
     player->flameDest.x = ((int)player->location.x - 8) * window->pixel_size;
 }
 
-int main() {
+void render(Window *window, Player *player) {
+    // First clear the renderer
+    SDL_SetRenderDrawColor(window->renderer, 200, 200, 200, 255);
+    SDL_RenderClear(window->renderer);
+    // Draw the textures
+    SDL_RenderCopy(window->renderer, player->texture.ship, &player->ship,
+                   &player->shipDest);
+    SDL_RenderCopy(window->renderer, player->texture.flame, &player->flame,
+                   &player->flameDest);
+
+    // Update the screen
+    SDL_RenderPresent(window->renderer);
+}
+
+void timeFrame(Timing *t) {
+    t->frame_stop = SDL_GetTicks();
+    unsigned int target_frames = (t->frame_stop - t->start_time) / FRAME_TIME;
+
+    // only pause if we're on track for 100 fps
+    if (t->frame_count >= target_frames) {
+        while (t->frame_stop - t->frame_start < FRAME_TIME) {
+            SDL_Delay(1);
+            t->frame_stop = SDL_GetTicks();
+        }
+    }
+
+    t->frame_count += 1;
+    t->fps += 1;
+    if ((t->frame_stop - t->start_time) / 1000 > t->secs) {
+        t->secs += 1;
+        if (show_fps) {
+            SDL_Log("FPS: %d\n", t->fps);
+        }
+        t->fps = 0;
+    }
+    if (t->frame_stop - t->frame_start > FRAME_TIME + 2) {
+        SDL_Log("Big Frame: %d millisecs\n", t->frame_stop - t->frame_start);
+    }
+}
+
+int main(int argc, char *argv[]) {
+    SDL_bool show_fps = SDL_FALSE;
+    if (argc > 1) {
+        argFPS(argc, argv);
+    }
+
     Window window;
     initWindow(&window);
 
     Player player;
     initPlayer(&player, &window);
 
-    SDL_bool running = SDL_TRUE;
-    unsigned int frame_time = 10; // 10 milisecs per frame
-    unsigned long frame_count = 0;
-    unsigned int secs = 0;
-    unsigned int fps = 0;
-    unsigned int start_time = SDL_GetTicks();
-    // unsigned int second = time + 1000;
-    // unsigned int start_tick, stop_tick;
-    unsigned int frame_start, frame_stop;
-    while (running) {
-        frame_start = SDL_GetTicks();
+    Timing timing;
+    initTiming(&timing);
 
+    while (SDL_TRUE) {
+        timing.frame_start = SDL_GetTicks();
         getEvents(&player.action, &player.anim);
-
-        // apply player actions
         if (player.action.quit) {
-            running = SDL_FALSE;
+            break;
         }
         doUpdates(&player, &window);
-
-        // First clear the renderer
-        SDL_SetRenderDrawColor(window.renderer, 200, 200, 200, 255);
-        SDL_RenderClear(window.renderer);
-        // Draw the textures
-        SDL_RenderCopy(window.renderer, player.texture.ship, &player.ship,
-                       &player.shipDest);
-        SDL_RenderCopy(window.renderer, player.texture.flame, &player.flame,
-                       &player.flameDest);
-
-        // Update the screen
-        SDL_RenderPresent(window.renderer);
-
-        frame_stop = SDL_GetTicks();
-        unsigned int target_frames = (frame_stop - start_time) / frame_time;
-
-        // only pause if we're on track for 100 fps
-        if (frame_count >= target_frames) {
-            while (frame_stop - frame_start < frame_time) {
-                SDL_Delay(1);
-                frame_stop = SDL_GetTicks();
-            }
-        }
-
-        frame_count += 1;
-        fps += 1;
-        if ((frame_stop - start_time) / 1000 > secs) {
-            secs += 1;
-            SDL_Log("FPS: %d\n", fps);
-            fps = 0;
-        }
-        if (frame_stop - frame_start > frame_time + 2) {
-            SDL_Log("Big Frame: %d millisecs\n", frame_stop - frame_start);
-        }
+        render(&window, &player);
+        timeFrame(&timing);
     }
     return 0;
 }
