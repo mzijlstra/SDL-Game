@@ -13,16 +13,15 @@
 SDL_bool show_fps;
 
 static void argFPS(int argc, char *argv[]) {
+    show_fps = SDL_FALSE;
     for (int i = 1; i < argc; i++) {
         if (strcmp("fps", argv[i]) == 0) {
             show_fps = SDL_TRUE;
         }
     }
-    show_fps = SDL_FALSE;
 }
 
 int main(int argc, char *argv[]) {
-    SDL_bool show_fps = SDL_FALSE;
     if (argc > 1) {
         argFPS(argc, argv);
     }
