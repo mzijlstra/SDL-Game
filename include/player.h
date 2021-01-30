@@ -6,6 +6,7 @@
 
 #define TILE_WIDTH 16
 #define TILE_HEIGHT 16
+#define ANIM_TIME 15
 
 typedef struct PlayerAction {
     SDL_bool up;
@@ -41,7 +42,7 @@ typedef struct PlayerVelocity {
 typedef struct PlayerAnim {
     unsigned int up_count;
     unsigned int down_count;
-    unsigned int right_count;
+    unsigned int boost_count;
     uint8_t shipFrame;
     uint8_t flameFrame;
 } PlayerAnim;

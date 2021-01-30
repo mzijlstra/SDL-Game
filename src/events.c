@@ -18,6 +18,7 @@ void getEvents(PlayerAction *action, PlayerAnim *anim) {
             case SDLK_UP:
             case SDLK_w:
                 action->up = SDL_TRUE;
+                anim->up_count = 0;
                 break;
             case SDLK_RIGHT:
             case SDLK_d:
@@ -26,6 +27,7 @@ void getEvents(PlayerAction *action, PlayerAnim *anim) {
             case SDLK_DOWN:
             case SDLK_s:
                 action->down = SDL_TRUE;
+                anim->down_count = 0;
                 break;
             case SDLK_LEFT:
             case SDLK_a:
@@ -33,6 +35,7 @@ void getEvents(PlayerAction *action, PlayerAnim *anim) {
                 break;
             case SDLK_TAB:
                 action->boost = SDL_TRUE;
+                anim->boost_count = 0;
                 break;
             default:
                 break;
@@ -44,7 +47,7 @@ void getEvents(PlayerAction *action, PlayerAnim *anim) {
             case SDLK_UP:
             case SDLK_w:
                 action->up = SDL_FALSE;
-                anim->up_count = 0;
+                anim->up_count = ANIM_TIME;
                 break;
             case SDLK_RIGHT:
             case SDLK_d:
@@ -53,15 +56,15 @@ void getEvents(PlayerAction *action, PlayerAnim *anim) {
             case SDLK_DOWN:
             case SDLK_s:
                 action->down = SDL_FALSE;
-                anim->down_count = 0;
+                anim->down_count = ANIM_TIME;
                 break;
             case SDLK_LEFT:
             case SDLK_a:
                 action->left = SDL_FALSE;
                 break;
             case SDLK_TAB:
-                anim->right_count = 0;
                 action->boost = SDL_FALSE;
+                anim->boost_count = 0;
                 break;
             default:
                 break;
@@ -126,24 +129,40 @@ void doUpdates(Player *player, Window *window) {
         player->velocity.y -= player->acceleration.up;
         // tilt ship
         player->anim.up_count += 1;
-        if (player->action.boost && player->action.right &&
-            player->anim.up_count > 15) {
+        if (!player->anim.down_count && player->action.boost &&
+            player->action.right && player->anim.up_count > ANIM_TIME) {
             player->anim.shipFrame = 0;
+        } else if (player->anim.down_count) {
+            player->anim.shipFrame = 2;
         } else {
             player->anim.shipFrame = 1;
         }
-    } else if (player->action.down) {
+    } else {
+        if (player->anim.up_count > 0) {
+            player->anim.up_count -= 1;
+        }
+    }
+
+    if (player->action.down) {
         // move ship
         player->velocity.y += player->acceleration.down;
         // tilt ship
         player->anim.down_count += 1;
-        if (player->action.boost && player->action.right &&
-            player->anim.down_count > 15) {
+        if (!player->anim.up_count && player->action.boost &&
+            player->action.right && player->anim.down_count > ANIM_TIME) {
             player->anim.shipFrame = 4;
+        } else if (player->anim.up_count) {
+            player->anim.shipFrame = 2;
         } else {
             player->anim.shipFrame = 3;
         }
     } else {
+        if (player->anim.down_count > 0) {
+            player->anim.down_count -= 1; // TODO act on this
+        }
+    }
+
+    if (!player->action.up && !player->action.down) {
         player->anim.shipFrame = 2;
     }
 
@@ -162,8 +181,8 @@ void doUpdates(Player *player, Window *window) {
 
         // set ship flame
         if (player->action.boost) {
-            player->anim.right_count += 1;
-            if (player->anim.right_count % 10 == 0) { 
+            player->anim.boost_count += 1;
+            if (player->anim.boost_count % 10 == 0) {
                 // every 100milli secs
                 player->anim.flameFrame += 1;
                 if (player->anim.flameFrame == 4) {
@@ -208,6 +227,6 @@ void doUpdates(Player *player, Window *window) {
         player->location.x = player->location.max_w;
     }
     player->img.shipDest.x = ((int)player->location.x) * window->pixel_size;
-    player->img.flameDest.x = ((int)player->location.x - 8) * window->pixel_size;
+    player->img.flameDest.x =
+        ((int)player->location.x - 8) * window->pixel_size;
 }
-
