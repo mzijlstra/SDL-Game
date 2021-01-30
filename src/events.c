@@ -96,26 +96,26 @@ void doUpdates(Player *player, Window *window) {
 
             window->pixel_size = w / window->width;
 
-            player->shipDest.x *= window->pixel_size;
-            player->shipDest.y *= window->pixel_size;
-            player->shipDest.w *= window->pixel_size;
-            player->shipDest.h *= window->pixel_size;
-            player->flameDest.x *= window->pixel_size;
-            player->flameDest.y *= window->pixel_size;
-            player->flameDest.w *= window->pixel_size;
-            player->flameDest.h *= window->pixel_size;
+            player->img.shipDest.x *= window->pixel_size;
+            player->img.shipDest.y *= window->pixel_size;
+            player->img.shipDest.w *= window->pixel_size;
+            player->img.shipDest.h *= window->pixel_size;
+            player->img.flameDest.x *= window->pixel_size;
+            player->img.flameDest.y *= window->pixel_size;
+            player->img.flameDest.w *= window->pixel_size;
+            player->img.flameDest.h *= window->pixel_size;
         } else if (window->mode == SDL_WINDOW_FULLSCREEN_DESKTOP) {
             SDL_SetWindowFullscreen(window->ptr, 0);
             window->mode = 0;
 
-            player->shipDest.x /= window->pixel_size;
-            player->shipDest.y /= window->pixel_size;
-            player->shipDest.w /= window->pixel_size;
-            player->shipDest.h /= window->pixel_size;
-            player->flameDest.x /= window->pixel_size;
-            player->flameDest.y /= window->pixel_size;
-            player->flameDest.w /= window->pixel_size;
-            player->flameDest.h /= window->pixel_size;
+            player->img.shipDest.x /= window->pixel_size;
+            player->img.shipDest.y /= window->pixel_size;
+            player->img.shipDest.w /= window->pixel_size;
+            player->img.shipDest.h /= window->pixel_size;
+            player->img.flameDest.x /= window->pixel_size;
+            player->img.flameDest.y /= window->pixel_size;
+            player->img.flameDest.w /= window->pixel_size;
+            player->img.flameDest.h /= window->pixel_size;
 
             window->pixel_size = 1;
         }
@@ -128,9 +128,9 @@ void doUpdates(Player *player, Window *window) {
         player->anim.up_count += 1;
         if (player->action.boost && player->action.right &&
             player->anim.up_count > 15) {
-            player->ship.y = 0;
+            player->anim.shipFrame = 0;
         } else {
-            player->ship.y = 16;
+            player->anim.shipFrame = 1;
         }
     } else if (player->action.down) {
         // move ship
@@ -139,19 +139,19 @@ void doUpdates(Player *player, Window *window) {
         player->anim.down_count += 1;
         if (player->action.boost && player->action.right &&
             player->anim.down_count > 15) {
-            player->ship.y = 64;
+            player->anim.shipFrame = 4;
         } else {
-            player->ship.y = 48;
+            player->anim.shipFrame = 3;
         }
     } else {
-        player->ship.y = 32;
+        player->anim.shipFrame = 2;
     }
 
     if (player->action.left) {
         // move ship
         player->velocity.x -= player->acceleration.left;
         // set ship flame
-        player->flame.x = 48;
+        player->anim.flameFrame = 0;
     } else if (player->action.right) {
         // move ship
         if (player->action.boost) {
@@ -163,15 +163,23 @@ void doUpdates(Player *player, Window *window) {
         // set ship flame
         if (player->action.boost) {
             player->anim.right_count += 1;
-            if (player->anim.right_count % 5 == 0) {
-                player->flame.x = (player->flame.x + PLAYER_WIDTH) % 32;
+            if (player->anim.right_count % 10 == 0) { 
+                // every 100milli secs
+                player->anim.flameFrame += 1;
+                if (player->anim.flameFrame == 4) {
+                    player->anim.flameFrame = 2;
+                }
             }
         } else {
-            player->flame.x = 32;
+            player->anim.flameFrame = 1;
         }
     } else {
-        player->flame.x = 48;
+        player->anim.flameFrame = 0;
     }
+
+    // adjust animation frames
+    player->img.shipSrc.x = player->anim.shipFrame * TILE_WIDTH;
+    player->img.flameSrc.x = player->anim.flameFrame * TILE_WIDTH;
 
     // update velocity
     player->velocity.x = player->velocity.x * (1.0 - 0.2); // 0.2 is drag
@@ -190,8 +198,8 @@ void doUpdates(Player *player, Window *window) {
     } else if (player->location.y > player->location.max_h) {
         player->location.y = player->location.max_h;
     }
-    player->shipDest.y = ((int)player->location.y) * window->pixel_size;
-    player->flameDest.y = player->shipDest.y;
+    player->img.shipDest.y = ((int)player->location.y) * window->pixel_size;
+    player->img.flameDest.y = player->img.shipDest.y;
 
     player->location.x += player->velocity.x;
     if (player->location.x < 0) {
@@ -199,7 +207,7 @@ void doUpdates(Player *player, Window *window) {
     } else if (player->location.x > player->location.max_w) {
         player->location.x = player->location.max_w;
     }
-    player->shipDest.x = ((int)player->location.x) * window->pixel_size;
-    player->flameDest.x = ((int)player->location.x - 8) * window->pixel_size;
+    player->img.shipDest.x = ((int)player->location.x) * window->pixel_size;
+    player->img.flameDest.x = ((int)player->location.x - 8) * window->pixel_size;
 }
 

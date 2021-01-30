@@ -4,8 +4,8 @@
 #include <SDL2/SDL.h>
 #include "window.h"
 
-#define PLAYER_WIDTH 16
-#define PLAYER_HEIGHT 16
+#define TILE_WIDTH 16
+#define TILE_HEIGHT 16
 
 typedef struct PlayerAction {
     SDL_bool up;
@@ -39,15 +39,21 @@ typedef struct PlayerVelocity {
 } PlayerVelocity;
 
 typedef struct PlayerAnim {
-    uint8_t up_count;
-    uint8_t down_count;
-    uint8_t right_count;
+    unsigned int up_count;
+    unsigned int down_count;
+    unsigned int right_count;
+    uint8_t shipFrame;
+    uint8_t flameFrame;
 } PlayerAnim;
 
-typedef struct PlayerTexture {
+typedef struct PlayerImage {
     SDL_Texture *ship;
     SDL_Texture *flame;
-} PlayerTexture;
+    SDL_Rect shipSrc;
+    SDL_Rect shipDest;
+    SDL_Rect flameSrc;
+    SDL_Rect flameDest;
+} PlayerImage;
 
 typedef struct Player {
     PlayerAction action;
@@ -55,11 +61,7 @@ typedef struct Player {
     PlayerAcceleration acceleration;
     PlayerVelocity velocity;
     PlayerAnim anim;
-    PlayerTexture texture;
-    SDL_Rect ship;
-    SDL_Rect shipDest;
-    SDL_Rect flame;
-    SDL_Rect flameDest;
+    PlayerImage img;
 } Player;
 
 void initPlayer(Player *player, Window * window);
