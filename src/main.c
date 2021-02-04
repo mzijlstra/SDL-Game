@@ -27,12 +27,12 @@ int main(int argc, char *argv[]) {
         argFPS(argc, argv);
     }
 
-    Window window;
-    initWindow(&window);
+    Window win;
+    initWindow(&win);
 
     Level lvl;
     Player p1;
-    initLevel(&lvl, &p1, &window);
+    initLevel(&lvl, &p1, &win);
 
     Timing timing;
     initTiming(&timing);
@@ -43,8 +43,8 @@ int main(int argc, char *argv[]) {
         if (p1.action.quit) {
             break;
         }
-        doUpdates(&p1, &window);
-        render(&window, &p1);
+        doUpdates(&p1, &win);
+        render(&win, &lvl);
         timeFrame(&timing);
     }
     return 0;

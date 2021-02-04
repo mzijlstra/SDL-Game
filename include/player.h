@@ -3,8 +3,7 @@
 
 #include "window.h"
 
-#define TILE_WIDTH 16
-#define TILE_HEIGHT 16
+#define TILE_SIZE 16
 
 typedef struct PlayerAction {
     SDL_bool up;
@@ -63,6 +62,6 @@ typedef struct Player {
     PlayerImage img;
 } Player;
 
-void initPlayer(Player *player, Window * window);
+void initPlayer(Player *player, Window * win);
 
 #endif

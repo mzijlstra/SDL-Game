@@ -4,6 +4,6 @@
 #include "player.h"
 
 void getEvents(PlayerAction *action, PlayerAnim *anim);
-void doUpdates(Player *player, Window *window);
+void doUpdates(Player *player, Window *win);
 
 #endif

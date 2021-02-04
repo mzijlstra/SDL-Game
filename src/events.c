@@ -80,44 +80,44 @@ void getEvents(PlayerAction *action, PlayerAnim *anim) {
     }
 }
 
-void doUpdates(Player *player, Window *window) {
+void doUpdates(Player *player, Window *win) {
     if (player->action.fullscreen) {
         // Only do it once
         player->action.fullscreen = SDL_FALSE;
 
-        if (window->mode == 0) {
-            SDL_SetWindowFullscreen(window->ptr, SDL_WINDOW_FULLSCREEN_DESKTOP);
-            window->mode = SDL_WINDOW_FULLSCREEN_DESKTOP;
-            window->pixel_size = 4;
+        if (win->mode == 0) {
+            SDL_SetWindowFullscreen(win->ptr, SDL_WINDOW_FULLSCREEN_DESKTOP);
+            win->mode = SDL_WINDOW_FULLSCREEN_DESKTOP;
+            win->pixel_size = 4;
 
             int w, h;
-            SDL_GetWindowSize(window->ptr, &w, &h);
+            SDL_GetWindowSize(win->ptr, &w, &h);
             SDL_Log("Window size: %d %d\n", w, h);
 
-            window->pixel_size = w / window->width;
+            win->pixel_size = w / win->width;
 
-            player->img.shipDest.x *= window->pixel_size;
-            player->img.shipDest.y *= window->pixel_size;
-            player->img.shipDest.w *= window->pixel_size;
-            player->img.shipDest.h *= window->pixel_size;
-            player->img.flameDest.x *= window->pixel_size;
-            player->img.flameDest.y *= window->pixel_size;
-            player->img.flameDest.w *= window->pixel_size;
-            player->img.flameDest.h *= window->pixel_size;
-        } else if (window->mode == SDL_WINDOW_FULLSCREEN_DESKTOP) {
-            SDL_SetWindowFullscreen(window->ptr, 0);
-            window->mode = 0;
+            player->img.shipDest.x *= win->pixel_size;
+            player->img.shipDest.y *= win->pixel_size;
+            player->img.shipDest.w *= win->pixel_size;
+            player->img.shipDest.h *= win->pixel_size;
+            player->img.flameDest.x *= win->pixel_size;
+            player->img.flameDest.y *= win->pixel_size;
+            player->img.flameDest.w *= win->pixel_size;
+            player->img.flameDest.h *= win->pixel_size;
+        } else if (win->mode == SDL_WINDOW_FULLSCREEN_DESKTOP) {
+            SDL_SetWindowFullscreen(win->ptr, 0);
+            win->mode = 0;
 
-            player->img.shipDest.x /= window->pixel_size;
-            player->img.shipDest.y /= window->pixel_size;
-            player->img.shipDest.w /= window->pixel_size;
-            player->img.shipDest.h /= window->pixel_size;
-            player->img.flameDest.x /= window->pixel_size;
-            player->img.flameDest.y /= window->pixel_size;
-            player->img.flameDest.w /= window->pixel_size;
-            player->img.flameDest.h /= window->pixel_size;
+            player->img.shipDest.x /= win->pixel_size;
+            player->img.shipDest.y /= win->pixel_size;
+            player->img.shipDest.w /= win->pixel_size;
+            player->img.shipDest.h /= win->pixel_size;
+            player->img.flameDest.x /= win->pixel_size;
+            player->img.flameDest.y /= win->pixel_size;
+            player->img.flameDest.w /= win->pixel_size;
+            player->img.flameDest.h /= win->pixel_size;
 
-            window->pixel_size = 1;
+            win->pixel_size = 1;
         }
     }
 
@@ -178,8 +178,8 @@ void doUpdates(Player *player, Window *window) {
     }
 
     // adjust animation frames
-    player->img.shipSrc.x = player->anim.shipFrame * TILE_WIDTH;
-    player->img.flameSrc.x = player->anim.flameFrame * TILE_WIDTH;
+    player->img.shipSrc.x = player->anim.shipFrame * TILE_SIZE;
+    player->img.flameSrc.x = player->anim.flameFrame * TILE_SIZE;
 
     // update velocity
     player->velocity.x = player->velocity.x * (1.0 - 0.2); // 0.2 is drag
@@ -198,7 +198,7 @@ void doUpdates(Player *player, Window *window) {
     } else if (player->location.y > player->location.max_h) {
         player->location.y = player->location.max_h;
     }
-    player->img.shipDest.y = ((int)player->location.y) * window->pixel_size;
+    player->img.shipDest.y = ((int)player->location.y) * win->pixel_size;
     player->img.flameDest.y = player->img.shipDest.y;
 
     player->location.x += player->velocity.x;
@@ -207,7 +207,7 @@ void doUpdates(Player *player, Window *window) {
     } else if (player->location.x > player->location.max_w) {
         player->location.x = player->location.max_w;
     }
-    player->img.shipDest.x = ((int)player->location.x) * window->pixel_size;
-    player->img.flameDest.x = ((int)player->location.x - 8) * window->pixel_size;
+    player->img.shipDest.x = ((int)player->location.x) * win->pixel_size;
+    player->img.flameDest.x = ((int)player->location.x - 8) * win->pixel_size;
 }
 

@@ -5,10 +5,11 @@
 #include "player.h"
 
 typedef struct Level {
-    unsigned int w;
-    unsigned int h;
+    int w;
+    int h;
     Player *p1;
     SDL_Texture *img;
+    SDL_Rect src;
 } Level;
 
 void initLevel(Level *level, Player *p1, Window *window);

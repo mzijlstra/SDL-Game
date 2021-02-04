@@ -3,9 +3,9 @@
 
 #include <SDL2/SDL.h>
 #include "window.h"
-#include "player.h"
+#include "level.h"
 
 
-void render(Window *window, Player *player);
+void render(Window *win, Level *lvl);
 
 #endif
