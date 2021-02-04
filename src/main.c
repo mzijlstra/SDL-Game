@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "window.h"
+#include "level.h"
 #include "player.h"
 #include "timing.h"
 #include "events.h"
@@ -29,20 +30,21 @@ int main(int argc, char *argv[]) {
     Window window;
     initWindow(&window);
 
-    Player player;
-    initPlayer(&player, &window);
+    Level lvl;
+    Player p1;
+    initLevel(&lvl, &p1, &window);
 
     Timing timing;
     initTiming(&timing);
 
     while (SDL_TRUE) {
         timing.frame_start = SDL_GetTicks();
-        getEvents(&player.action, &player.anim);
-        if (player.action.quit) {
+        getEvents(&p1.action, &p1.anim);
+        if (p1.action.quit) {
             break;
         }
-        doUpdates(&player, &window);
-        render(&window, &player);
+        doUpdates(&p1, &window);
+        render(&window, &p1);
         timeFrame(&timing);
     }
     return 0;

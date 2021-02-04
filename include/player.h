@@ -1,7 +1,6 @@
 #ifndef PLAYER_INCLUDED
 #define PLAYER_INCLUDED
 
-#include <SDL2/SDL.h>
 #include "window.h"
 
 #define TILE_WIDTH 16
