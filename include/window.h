@@ -13,7 +13,7 @@ typedef struct Window {
     SDL_Renderer *renderer;
 } Window;
 
-void initWindow(Window *window);
+void initWindow(Window *win);
 SDL_Texture *loadTexture(char *asset, SDL_Renderer *ren);
 
 
