@@ -92,6 +92,6 @@ void initLevel(Level *lvl, Player *p1, Window *win) {
     SDL_FreeSurface(img);
 
     lvl->src.x = lvl->src.y = 0;
-    lvl->src.w = win->width / win->pixel_size;
-    lvl->src.h = win->height / win->pixel_size;
+    lvl->src.w = win->w / win->pixel_size;
+    lvl->src.h = win->h / win->pixel_size;
 }

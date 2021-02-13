@@ -7,8 +7,8 @@
 typedef struct Window {
     unsigned int mode;
     unsigned int pixel_size;
-    int width;
-    int height;
+    int w;
+    int h;
     SDL_Window *ptr;
     SDL_Renderer *renderer;
 } Window;

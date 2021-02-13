@@ -8,10 +8,10 @@ void initPlayer(Player *player, Window *win) {
     player->action.boost = SDL_FALSE;
     player->action.fullscreen = SDL_FALSE;
     player->action.quit = SDL_FALSE;
-    player->location.x = 100.0;
-    player->location.y = 100.0;
-    player->location.max_w = win->width - TILE_SIZE;
-    player->location.max_h = win->height - TILE_SIZE;
+    player->location.x = win->w / 2;
+    player->location.y = win->h / 2;
+    player->location.max_w = win->w - TILE_SIZE;
+    player->location.max_h = win->h - TILE_SIZE;
     player->acceleration.up = 0.7;
     player->acceleration.down = 0.7;
     player->acceleration.right = 0.7;

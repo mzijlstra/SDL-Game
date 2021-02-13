@@ -4,8 +4,8 @@ void initWindow(Window *win) {
     win->mode = 0;
     win->pixel_size = 1;
     // TODO set these to 1/4 of desktop resolution
-    win->width = 960;
-    win->height = 540;
+    win->w = 960;
+    win->h = 540;
 
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         SDL_Log("SDL_Init Error: %s\n", SDL_GetError());
@@ -14,8 +14,8 @@ void initWindow(Window *win) {
     atexit(SDL_Quit);
 
     win->ptr = SDL_CreateWindow("Hello World!", SDL_WINDOWPOS_CENTERED,
-                                   SDL_WINDOWPOS_CENTERED, win->width,
-                                   win->height, SDL_WINDOW_SHOWN);
+                                SDL_WINDOWPOS_CENTERED, win->w, win->h,
+                                SDL_WINDOW_SHOWN);
     if (win->ptr == NULL) {
         SDL_Log("SDL_CreateWindow Error: %s\n", SDL_GetError());
         exit(1);
@@ -29,11 +29,10 @@ void initWindow(Window *win) {
     SDL_Log("Desktop: %d x %d\n", mode.w, mode.h);
 
     // set these to 1/4 of desktop resolution
-    win->width = mode.w / 4;
-    win->height = mode.h / 4;
-
-    SDL_SetWindowSize(win->ptr, mode.w / 4, mode.h / 4);
-    SDL_Log("Set win size: %d %d\n", mode.w / 4, mode.h / 4);
+    // win->w = mode.w / 4;
+    // win->h = mode.h / 4;
+    // SDL_SetWindowSize(win->ptr, mode.w / 4, mode.h / 4);
+    // SDL_Log("Set win size: %d %d\n", mode.w / 4, mode.h / 4);
 
     win->renderer = SDL_CreateRenderer(
         win->ptr, -1,

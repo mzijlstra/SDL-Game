@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 
 #define FRAME_TIME 10
+#define ANIM_TIME 15
 
 typedef struct Timing {
     unsigned long frame_count;

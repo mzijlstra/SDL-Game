@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
         if (p1.action.quit) {
             break;
         }
-        doUpdates(&p1, &win);
+        doUpdates(&lvl, &win);
         render(&win, &lvl);
         timeFrame(&timing);
     }

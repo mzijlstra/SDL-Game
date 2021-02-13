@@ -1,9 +1,10 @@
 #ifndef EVENTS_INCLUDED
 #define EVENTS_INCLUDED
 
-#include "player.h"
+#include "level.h"
+#include "timing.h"
 
 void getEvents(PlayerAction *action, PlayerAnim *anim);
-void doUpdates(Player *player, Window *win);
+void doUpdates(Level *lvl, Window *win);
 
 #endif

@@ -7,8 +7,8 @@ void render(Window *win, Level *lvl) {
 
     // Draw the background
     SDL_Rect dst;
-    dst.w = win->width;
-    dst.h = win->height;
+    dst.w = win->w;
+    dst.h = win->h;
     dst.x = dst.y = 0;
     SDL_RenderCopy(win->renderer, lvl->img, &lvl->src, &dst);
 
