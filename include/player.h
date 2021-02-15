@@ -3,8 +3,6 @@
 
 #include "window.h"
 
-#define TILE_SIZE 16
-
 typedef struct PlayerAction {
     SDL_bool up;
     SDL_bool down;
@@ -19,8 +17,6 @@ typedef struct PlayerAction {
 typedef struct PlayerLocation {
     double x;
     double y;
-    unsigned int max_w;
-    unsigned int max_h;
 } PlayerLocation;
 
 typedef struct PlayerAcceleration {

@@ -234,40 +234,35 @@ void doUpdates(Level *lvl, Window *win) {
     player->img.shipDest.y = ((int)player->location.y - lvl->src.y) * win->pixel_size;
     player->img.flameDest.y = player->img.shipDest.y;
 
-    int q1H = win->h * 0.25; // TODO make these more constant
-    int q3H = win->h * 0.75;
-    int q1W = win->w * 0.25;
-    int q3W = win->w * 0.75;
-
-    // move level left instead of move player right at 0.75 screen width
-    if (player->img.shipDest.x > q3W && player->location.x < lvl->w - q1W)  {
-        int diff = player->img.shipDest.x - q3W;
-        player->img.shipDest.x = q3W;
-        player->img.flameDest.x = q3W - 8;
+    // move level left instead of move player right at golden ratio
+    if (player->img.shipDest.x > win->b && player->location.x < lvl->w - win->a)  {
+        int diff = player->img.shipDest.x - win->b;
+        player->img.shipDest.x = win->b;
+        player->img.flameDest.x = player->img.shipDest.x - 8;
         lvl->src.x += diff;
     }
 
-    // move level right instead of player left at 0.25 screen width
-    if (player->img.shipDest.x < q1W && player->location.x > q1W)  {
-        int diff = player->img.shipDest.x - q1W;
-        player->img.shipDest.x = q1W;
-        player->img.flameDest.x = q1W - 8;
+    // move level right instead of player left at golden ratio
+    if (player->img.shipDest.x < win->b && player->location.x > win->b)  {
+        int diff = player->img.shipDest.x - win->b;
+        player->img.shipDest.x = win->b;
+        player->img.flameDest.x = player->img.shipDest.x - 8;
         lvl->src.x += diff;
     }
 
     // move level up instead of player down at 0.75 screen height
-    if (player->img.shipDest.y > q3H && player->location.y < lvl->h - q1H) {
-        int diff = player->img.shipDest.y - q3H;
-        player->img.shipDest.y = q3H;
-        player->img.flameDest.y = q3H;
+    if (player->img.shipDest.y > win->q3h && player->location.y < lvl->h - win->q1h) {
+        int diff = player->img.shipDest.y - win->q3h;
+        player->img.shipDest.y = win->q3h;
+        player->img.flameDest.y = win->q3h;
         lvl->src.y += diff;        
     }
 
     // move level down instead of player up at 0.25 screen height
-    if (player->img.shipDest.y < q1H && player->location.y > q1H) {
-        int diff = player->img.shipDest.y - q1H;
-        player->img.shipDest.y = q1H;
-        player->img.flameDest.y = q1H;
+    if (player->img.shipDest.y < win->q1h && player->location.y > win->q1h) {
+        int diff = player->img.shipDest.y - win->q1h;
+        player->img.shipDest.y = win->q1h;
+        player->img.flameDest.y = win->q1h;
         lvl->src.y += diff;
     }
 }
