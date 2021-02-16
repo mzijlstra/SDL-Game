@@ -39,6 +39,7 @@ int main(int argc, char *argv[]) {
     playLvl.getEvents = &getEvents;
     playLvl.doUpdates = &doUpdates;
     playLvl.render = &render;
+    playLvl.timeFrame = &timeFrame;
 
     Timing timing;
     initTiming(&timing);
@@ -51,7 +52,7 @@ int main(int argc, char *argv[]) {
         }
         (*playLvl.doUpdates)(&lvl, &win);
         (*playLvl.render)(&win, &lvl);
-        timeFrame(&timing);
+        (*playLvl.timeFrame)(&timing);
     }
     return 0;
 }
