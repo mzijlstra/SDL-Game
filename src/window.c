@@ -17,7 +17,7 @@ void initWindow(Window *win) {
     }
     atexit(SDL_Quit);
 
-    win->ptr = SDL_CreateWindow("Hello World!", SDL_WINDOWPOS_CENTERED,
+    win->ptr = SDL_CreateWindow("Hover Tank Racer", SDL_WINDOWPOS_CENTERED,
                                 SDL_WINDOWPOS_CENTERED, win->w, win->h,
                                 SDL_WINDOW_SHOWN);
     if (win->ptr == NULL) {

@@ -9,6 +9,7 @@
 #include "timing.h"
 #include "events.h"
 #include "gfx.h"
+#include "state.h"
 
 // global variable used inside timing.c
 SDL_bool show_fps;
@@ -34,17 +35,22 @@ int main(int argc, char *argv[]) {
     Player p1;
     initLevel(&lvl, &p1, &win);
 
+    GameState playLvl;
+    playLvl.getEvents = &getEvents;
+    playLvl.doUpdates = &doUpdates;
+    playLvl.render = &render;
+
     Timing timing;
     initTiming(&timing);
 
     while (SDL_TRUE) {
         timing.frame_start = SDL_GetTicks();
-        getEvents(&p1.action, &p1.anim);
+        (*playLvl.getEvents)(&p1.action, &p1.anim);
         if (p1.action.quit) {
             break;
         }
-        doUpdates(&lvl, &win);
-        render(&win, &lvl);
+        (*playLvl.doUpdates)(&lvl, &win);
+        (*playLvl.render)(&win, &lvl);
         timeFrame(&timing);
     }
     return 0;
