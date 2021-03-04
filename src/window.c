@@ -6,10 +6,6 @@ void initWindow(Window *win) {
     // Start with basic size everyone should be able to display
     win->w = 640;
     win->h = 480;
-    win->a = (640 / 1.618) + TILE_SIZE;
-    win->b = win->w - win->a;
-    win->q1h = win->h * 0.25;
-    win->q3h = win->h - win->q1h;
 
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         SDL_Log("SDL_Init Error: %s\n", SDL_GetError());
@@ -35,7 +31,7 @@ void initWindow(Window *win) {
     //set these to 1/2 of desktop resolution
     win->w = mode.w / 2;
     win->h = mode.h / 2;
-    win->a = (win->w / 1.618) + TILE_SIZE;
+    win->a = win->w / 6 * 5;
     win->b = win->w - win->a;
     win->q1h = win->h * 0.25;
     win->q3h = win->h - win->q1h;
