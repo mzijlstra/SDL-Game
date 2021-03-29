@@ -20,7 +20,6 @@ typedef struct Window {
 } Window;
 
 void initWindow(Window *win);
-SDL_Texture *loadTexture(char *asset, SDL_Renderer *ren);
-
+void windowSizeChanged(Window *win, int w, int h);
 
 #endif

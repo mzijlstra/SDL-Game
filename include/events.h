@@ -4,7 +4,7 @@
 #include "level.h"
 #include "timing.h"
 
-void getEvents(PlayerAction *action, PlayerAnim *anim);
+void getEvents(Level *lvl, Window *win);
 void doUpdates(Level *lvl, Window *win);
 
 #endif

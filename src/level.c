@@ -12,6 +12,8 @@ unsigned int bmask = 0x00ff0000;
 unsigned int amask = 0xff000000;
 #endif
 
+extern Assets assets;
+
 void initLevel(Level *lvl, Player *p1, Window *win) {
     SDL_DisplayMode mode;
     if (SDL_GetDesktopDisplayMode(0, &mode) != 0) {
@@ -25,7 +27,7 @@ void initLevel(Level *lvl, Player *p1, Window *win) {
     lvl->p1 = p1;
 
     // create texture for level
-    SDL_Surface *tiles = IMG_Load("assets/desert-tiles.png");
+    SDL_Surface *tiles = assets.bg_tiles;
     SDL_Surface *img =
         SDL_CreateRGBSurface(0, mode.w, mode.h, 32, rmask, gmask, bmask, amask);
 

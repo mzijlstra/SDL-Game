@@ -2,6 +2,8 @@
 #define PLAYER_INCLUDED
 
 #include "window.h"
+#include "asset.h"
+#include "linkedlist.h"
 
 typedef struct PlayerAction {
     SDL_bool up;
@@ -56,6 +58,7 @@ typedef struct Player {
     PlayerVelocity velocity;
     PlayerAnim anim;
     PlayerImage img;
+    LinkNode bulletList;
 } Player;
 
 void initPlayer(Player *player, Window * win);

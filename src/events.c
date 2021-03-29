@@ -1,41 +1,55 @@
 #include "events.h"
 
-void getEvents(PlayerAction *action, PlayerAnim *anim) {
+void getEvents(Level *lvl, Window *win) {
+    Player *p = lvl->p1;
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
         case SDL_QUIT:
-            action->quit = SDL_TRUE;
+            p->action.quit = SDL_TRUE;
+            break;
+        case SDL_WINDOWEVENT:
+            switch (event.window.event) {
+            case SDL_WINDOWEVENT_SIZE_CHANGED:
+                SDL_Log("Window %d size changed to %dx%d",
+                        event.window.windowID, event.window.data1,
+                        event.window.data2);
+
+                windowSizeChanged(win, event.window.data1, event.window.data2);
+                lvl->src.w = win->w / win->pixel_size;
+                lvl->src.h = win->h / win->pixel_size;
+                break;
+            }
             break;
         case SDL_KEYDOWN:
             switch (event.key.keysym.sym) {
             case SDLK_ESCAPE:
-                action->quit = SDL_TRUE;
+                p->action.quit = SDL_TRUE;
                 break;
             case SDLK_f:
-                action->fullscreen = SDL_TRUE;
+                p->action.fullscreen = SDL_TRUE;
                 break;
             case SDLK_UP:
             case SDLK_w:
-                action->up = SDL_TRUE;
-                anim->up_count = 0;
+                p->action.up = SDL_TRUE;
+                p->anim.up_count = 0;
                 break;
             case SDLK_RIGHT:
             case SDLK_d:
-                action->right = SDL_TRUE;
+                p->action.right = SDL_TRUE;
                 break;
             case SDLK_DOWN:
             case SDLK_s:
-                action->down = SDL_TRUE;
-                anim->down_count = 0;
+                p->action.down = SDL_TRUE;
+                p->anim.down_count = 0;
                 break;
             case SDLK_LEFT:
             case SDLK_a:
-                action->left = SDL_TRUE;
+                p->action.left = SDL_TRUE;
                 break;
             case SDLK_TAB:
-                action->boost = SDL_TRUE;
-                anim->boost_count = 0;
+                p->action.boost = SDL_TRUE;
+                p->anim.boost_count = 0;
                 break;
             default:
                 break;
@@ -46,25 +60,25 @@ void getEvents(PlayerAction *action, PlayerAnim *anim) {
             switch (event.key.keysym.sym) {
             case SDLK_UP:
             case SDLK_w:
-                action->up = SDL_FALSE;
-                anim->up_count = ANIM_TIME;
+                p->action.up = SDL_FALSE;
+                p->anim.up_count = ANIM_TIME;
                 break;
             case SDLK_RIGHT:
             case SDLK_d:
-                action->right = SDL_FALSE;
+                p->action.right = SDL_FALSE;
                 break;
             case SDLK_DOWN:
             case SDLK_s:
-                action->down = SDL_FALSE;
-                anim->down_count = ANIM_TIME;
+                p->action.down = SDL_FALSE;
+                p->anim.down_count = ANIM_TIME;
                 break;
             case SDLK_LEFT:
             case SDLK_a:
-                action->left = SDL_FALSE;
+                p->action.left = SDL_FALSE;
                 break;
             case SDLK_TAB:
-                action->boost = SDL_FALSE;
-                anim->boost_count = 0;
+                p->action.boost = SDL_FALSE;
+                p->anim.boost_count = 0;
                 break;
             default:
                 break;
@@ -229,13 +243,17 @@ void doUpdates(Level *lvl, Window *win) {
     }
 
     // place player on screen
-    player->img.shipDest.x = ((int)player->location.x - lvl->src.x) * win->pixel_size;
+    player->img.shipDest.x =
+        ((int)player->location.x - lvl->src.x) * win->pixel_size;
     player->img.flameDest.x = player->img.shipDest.x - (8 * win->pixel_size);
-    player->img.shipDest.y = ((int)player->location.y - lvl->src.y) * win->pixel_size;
+    player->img.shipDest.y =
+        ((int)player->location.y - lvl->src.y) * win->pixel_size;
     player->img.flameDest.y = player->img.shipDest.y;
 
     // move level left instead of move player right at golden ratio
-    if (player->img.shipDest.x > win->b && player->location.x < lvl->w - win->a)  {
+    // FIXME buggy on window resize!
+    if (player->img.shipDest.x > win->b &&
+        player->location.x < lvl->w - win->a) {
         int diff = player->img.shipDest.x - win->b;
         player->img.shipDest.x = win->b;
         player->img.flameDest.x = player->img.shipDest.x - 8;
@@ -243,7 +261,8 @@ void doUpdates(Level *lvl, Window *win) {
     }
 
     // move level right instead of player left at golden ratio
-    if (player->img.shipDest.x < win->b && player->location.x > win->b)  {
+    // FIXME buggy on window resize!
+    if (player->img.shipDest.x < win->b && player->location.x > win->b) {
         int diff = player->img.shipDest.x - win->b;
         player->img.shipDest.x = win->b;
         player->img.flameDest.x = player->img.shipDest.x - 8;
@@ -251,11 +270,12 @@ void doUpdates(Level *lvl, Window *win) {
     }
 
     // move level up instead of player down at 0.75 screen height
-    if (player->img.shipDest.y > win->q3h && player->location.y < lvl->h - win->q1h) {
+    if (player->img.shipDest.y > win->q3h &&
+        player->location.y < lvl->h - win->q1h) {
         int diff = player->img.shipDest.y - win->q3h;
         player->img.shipDest.y = win->q3h;
         player->img.flameDest.y = win->q3h;
-        lvl->src.y += diff;        
+        lvl->src.y += diff;
     }
 
     // move level down instead of player up at 0.25 screen height

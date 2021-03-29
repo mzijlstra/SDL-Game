@@ -1,5 +1,7 @@
 #include "player.h"
 
+extern Assets assets;
+
 void initPlayer(Player *player, Window *win) {
     player->action.up = SDL_FALSE;
     player->action.down = SDL_FALSE;
@@ -22,8 +24,8 @@ void initPlayer(Player *player, Window *win) {
     player->anim.boost_count = 0;
     player->anim.shipFrame = 2;
     player->anim.flameFrame = 0;
-    player->img.ship = loadTexture("assets/ship-sheet.png", win->renderer);
-    player->img.flame = loadTexture("assets/flame-sheet.png", win->renderer);
+    player->img.ship = assets.ship;
+    player->img.flame = assets.flame;
     player->img.shipSrc.x = player->anim.shipFrame * TILE_SIZE;
     player->img.shipSrc.y = 0;
     player->img.shipSrc.w = TILE_SIZE;
@@ -40,4 +42,7 @@ void initPlayer(Player *player, Window *win) {
     player->img.flameDest.y = player->location.y * win->pixel_size;
     player->img.flameDest.w = TILE_SIZE * win->pixel_size;
     player->img.flameDest.h = TILE_SIZE * win->pixel_size;
+    player->bulletList.next = &player->bulletList;
+    player->bulletList.prev = &player->bulletList;
+    player->bulletList.data = NULL; // this is the sentinel node
 }

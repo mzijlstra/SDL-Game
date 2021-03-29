@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "window.h"
+#include "asset.h"
 #include "level.h"
 #include "player.h"
 #include "timing.h"
@@ -11,8 +12,9 @@
 #include "gfx.h"
 #include "state.h"
 
-// global variable used inside timing.c
+// global variables
 SDL_bool show_fps;
+Assets assets;
 
 static void argFPS(int argc, char *argv[]) {
     show_fps = SDL_FALSE;
@@ -30,6 +32,7 @@ int main(int argc, char *argv[]) {
 
     Window win;
     initWindow(&win);
+    initAssets(&win);
 
     Level lvl;
     Player p1;
@@ -46,7 +49,7 @@ int main(int argc, char *argv[]) {
 
     while (SDL_TRUE) {
         timing.frame_start = SDL_GetTicks();
-        (*playLvl.getEvents)(&p1.action, &p1.anim);
+        (*playLvl.getEvents)(&lvl, &win);
         if (p1.action.quit) {
             break;
         }

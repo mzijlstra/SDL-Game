@@ -7,7 +7,7 @@
 #include "timing.h"
 
 typedef struct GameState {
-    void (*getEvents)(PlayerAction *, PlayerAnim *);
+    void (*getEvents)(Level *, Window *);
     void (*doUpdates)(Level *, Window *);
     void (*render)(Window *, Level *);
     void (*timeFrame)(Timing *);
