@@ -13,7 +13,7 @@ void initWindow(Window *win) {
     }
     atexit(SDL_Quit);
 
-    win->ptr = SDL_CreateWindow("Hover Tank Racer", SDL_WINDOWPOS_CENTERED,
+    win->ptr = SDL_CreateWindow("Hover Gun Racer", SDL_WINDOWPOS_CENTERED,
                                 SDL_WINDOWPOS_CENTERED, win->w, win->h,
                                 SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
     if (win->ptr == NULL) {
@@ -46,8 +46,8 @@ void initWindow(Window *win) {
 void windowSizeChanged(Window *win, int w, int h) {
     win->w = w;
     win->h = h;
-    win->a = win->w / 6 * 5;
-    win->b = win->w - win->a;
+    win->q1w = win->w * 0.25;
+    win->q3w = win->w - win->q1w;
     win->q1h = win->h * 0.25;
     win->q3h = win->h - win->q1h;
 }

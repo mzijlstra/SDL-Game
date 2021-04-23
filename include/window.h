@@ -11,8 +11,8 @@ typedef struct Window {
     unsigned int pixel_size;
     int w;
     int h;
-    int a; // large part of golden ratio, used for 'camera'
-    int b; // small part of golden ratio
+    int q1w; // large part of golden ratio, used for 'camera'
+    int q3w; // small part of golden ratio
     int q1h; // end of top quarter 
     int q3h; // begin of bottom quarter
     SDL_Window *ptr;

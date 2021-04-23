@@ -250,21 +250,19 @@ void doUpdates(Level *lvl, Window *win) {
         ((int)player->location.y - lvl->src.y) * win->pixel_size;
     player->img.flameDest.y = player->img.shipDest.y;
 
-    // move level left instead of move player right at golden ratio
-    // FIXME buggy on window resize!
-    if (player->img.shipDest.x > win->b &&
-        player->location.x < lvl->w - win->a) {
-        int diff = player->img.shipDest.x - win->b;
-        player->img.shipDest.x = win->b;
-        player->img.flameDest.x = player->img.shipDest.x - 8;
-        lvl->src.x += diff;
-    }
+    // instead of move player right move level left at 0.25 screen width
+    if ((player->img.shipDest.x > win->q1w &&
+         player->location.x < lvl->w - win->q1w &&
+         player->location.x < lvl->w - win->q3w) ||
+        // also when moving left beyond 0.25 screen witdh in the level
+        (player->img.shipDest.x < win->q1w && player->location.x > win->q1w)) {
 
-    // move level right instead of player left at golden ratio
-    // FIXME buggy on window resize!
-    if (player->img.shipDest.x < win->b && player->location.x > win->b) {
-        int diff = player->img.shipDest.x - win->b;
-        player->img.shipDest.x = win->b;
+        int diff = player->img.shipDest.x - win->q1w;
+        // if it's a big change, make it happen in steps so it's not as jarring
+        if (abs(diff) > 5) {
+            diff = diff / 5;
+        }
+        player->img.shipDest.x -= diff;
         player->img.flameDest.x = player->img.shipDest.x - 8;
         lvl->src.x += diff;
     }
