@@ -12,6 +12,7 @@ typedef struct Level {
     SDL_Rect src;
 } Level;
 
-void initLevel(Level *level, Player *p1, Window *window);
+void initLevel(Level *const lvl, Player *const p1, Window *const win);
+void updateLevel(Level *const lvl, Window *const win);
 
 #endif

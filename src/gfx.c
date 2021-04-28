@@ -1,4 +1,5 @@
 #include "gfx.h"
+#include "bullet.h"
 
 void render(Window *win, Level *lvl) {
     // First clear the renderer
@@ -11,6 +12,14 @@ void render(Window *win, Level *lvl) {
     dst.h = win->h;
     dst.x = dst.y = 0;
     SDL_RenderCopy(win->renderer, lvl->img, &lvl->src, &dst);
+
+    // Draw player bullets 
+    LinkNode *iter = lvl->p1->bulletList.next;
+    while (iter != &lvl->p1->bulletList) {
+        Bullet *blt = (Bullet *)iter->data;
+        SDL_RenderCopy(win->renderer, blt->img, &blt->imgSrc, &blt->imgDest);
+        iter = iter->next;
+    }
 
     // Draw the player textures
     SDL_RenderCopy(win->renderer, lvl->p1->img.ship, &lvl->p1->img.shipSrc,

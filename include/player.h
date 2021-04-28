@@ -4,6 +4,7 @@
 #include "window.h"
 #include "asset.h"
 #include "linkedlist.h"
+#include "timing.h"
 
 typedef struct PlayerAction {
     SDL_bool up;
@@ -62,5 +63,6 @@ typedef struct Player {
 } Player;
 
 void initPlayer(Player *player, Window * win);
+void updatePlayer(Player *const player);
 
 #endif

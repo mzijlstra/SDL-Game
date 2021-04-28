@@ -1,4 +1,5 @@
 #include "level.h"
+#include "bullet.h"
 
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 unsigned int rmask = 0xff000000;
@@ -14,7 +15,7 @@ unsigned int amask = 0xff000000;
 
 extern Assets assets;
 
-void initLevel(Level *lvl, Player *p1, Window *win) {
+void initLevel(Level *const lvl, Player *const p1, Window *const win) {
     SDL_DisplayMode mode;
     if (SDL_GetDesktopDisplayMode(0, &mode) != 0) {
         SDL_Log("SDL_GetDesktopDisplayMode failed: %s", SDL_GetError());
@@ -34,7 +35,6 @@ void initLevel(Level *lvl, Player *p1, Window *win) {
     SDL_Rect src, dst;
     src.w = src.h = dst.w = dst.h = TILE_SIZE;
     src.x = src.y = dst.x = dst.y = 0;
-
 
     // 2 rows of 'top'
     for (int i = 0; i < 2; i++) {
@@ -66,7 +66,6 @@ void initLevel(Level *lvl, Player *p1, Window *win) {
         dst.y += TILE_SIZE;
     }
 
-
     // 1 row of rocks going out of the canyon
     src.y += TILE_SIZE;
     dst.x = 0;
@@ -75,7 +74,6 @@ void initLevel(Level *lvl, Player *p1, Window *win) {
         dst.x += TILE_SIZE;
     }
     dst.y += TILE_SIZE;
-
 
     // fill the remainder with 'top'
     src.y = 0;
@@ -86,7 +84,6 @@ void initLevel(Level *lvl, Player *p1, Window *win) {
             dst.x += TILE_SIZE;
         }
         dst.y += TILE_SIZE;
-        
     }
 
     lvl->img = SDL_CreateTextureFromSurface(win->renderer, img);
@@ -96,4 +93,31 @@ void initLevel(Level *lvl, Player *p1, Window *win) {
     lvl->src.x = lvl->src.y = 0;
     lvl->src.w = win->w / win->pixel_size;
     lvl->src.h = win->h / win->pixel_size;
+}
+
+void updateLevel(Level *const lvl, Window *const win) { // TODO remove win param?
+    Player *player = lvl->p1;
+    updatePlayer(player);
+    // update player bullets
+    LinkNode *iter = player->bulletList.next;
+    LinkNode *next = NULL;
+    while (iter != &player->bulletList) {
+        next = iter->next;
+        if (updateBullet(iter->data, lvl) == BULLET_DONE) {
+            removeLink(iter);
+        }
+        iter = next;
+    }
+
+    // keep player inside the level
+    if (player->location.x < 0) {
+        player->location.x = 0;
+    } else if (player->location.x > lvl->w - TILE_SIZE) {
+        player->location.x = lvl->w - TILE_SIZE;
+    }
+    if (player->location.y < 0) {
+        player->location.y = 0;
+    } else if (player->location.y > lvl->h - TILE_SIZE) {
+        player->location.y = lvl->h - TILE_SIZE;
+    }
 }

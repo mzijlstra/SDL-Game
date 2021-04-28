@@ -6,9 +6,7 @@ void addLink(LinkNode *sentinel, void *data) {
     node->data = data;
     node->prev = sentinel;
     node->next = sentinel->next;
-    if (sentinel->prev == sentinel) {
-        sentinel->prev = node;
-    }
+    sentinel->next->prev = node;
     sentinel->next = node;
 }
 
