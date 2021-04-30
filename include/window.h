@@ -8,11 +8,11 @@
 
 typedef struct Window {
     unsigned int mode;
-    unsigned int pixel_size;
+    unsigned int pixelSize;
     int w;
     int h;
-    int q1w; // large part of golden ratio, used for 'camera'
-    int q3w; // small part of golden ratio
+    int q1w; // left quarter
+    int q3w; // right quarter
     int q1h; // end of top quarter 
     int q3h; // begin of bottom quarter
     SDL_Window *ptr;

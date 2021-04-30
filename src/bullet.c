@@ -22,11 +22,9 @@ void initBullet(Bullet *const bullet, Player *const player) {
     addLink(&player->bulletList, bullet);
 }
 
-int updateBullet(Bullet *const bullet, Level *const lvl) {
+int updateBullet(Bullet *const bullet) { 
     bullet->x += bullet->dx;
     bullet->y += bullet->dy;
-    bullet->imgDest.x = bullet->x - lvl->src.x;
-    bullet->imgDest.y = bullet->y - lvl->src.y;
     bullet->ttl--;
     if (bullet->ttl <= 0) {
         free(bullet);

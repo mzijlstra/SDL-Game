@@ -89,25 +89,11 @@ void initLevel(Level *const lvl, Player *const p1, Window *const win) {
     lvl->img = SDL_CreateTextureFromSurface(win->renderer, img);
     SDL_FreeSurface(tiles);
     SDL_FreeSurface(img);
-
-    lvl->src.x = lvl->src.y = 0;
-    lvl->src.w = win->w / win->pixel_size;
-    lvl->src.h = win->h / win->pixel_size;
 }
 
-void updateLevel(Level *const lvl, Window *const win) { // TODO remove win param?
+void updateLevel(Level *const lvl) { 
     Player *player = lvl->p1;
     updatePlayer(player);
-    // update player bullets
-    LinkNode *iter = player->bulletList.next;
-    LinkNode *next = NULL;
-    while (iter != &player->bulletList) {
-        next = iter->next;
-        if (updateBullet(iter->data, lvl) == BULLET_DONE) {
-            removeLink(iter);
-        }
-        iter = next;
-    }
 
     // keep player inside the level
     if (player->location.x < 0) {

@@ -16,8 +16,8 @@ void getEvents(Level *lvl, Window *win) {
                         event.window.data2);
 
                 windowSizeChanged(win, event.window.data1, event.window.data2);
-                lvl->src.w = win->w / win->pixel_size;
-                lvl->src.h = win->h / win->pixel_size;
+                lvl->p1->view.w = win->w / win->pixelSize;
+                lvl->p1->view.h = win->h / win->pixelSize;
                 break;
             }
             break;
@@ -111,20 +111,20 @@ void doUpdates(Level *lvl, Window *win) {
         if (win->mode == 0) {
             SDL_SetWindowFullscreen(win->ptr, SDL_WINDOW_FULLSCREEN_DESKTOP);
             win->mode = SDL_WINDOW_FULLSCREEN_DESKTOP;
-            win->pixel_size = 4;
+            win->pixelSize = 4;
 
             SDL_GetWindowSize(win->ptr, &win->w, &win->h);
 
-            win->pixel_size = 2; // TODO hardcoded
+            win->pixelSize = 2; // TODO hardcoded
 
-            player->img.shipDest.x *= win->pixel_size;
-            player->img.shipDest.y *= win->pixel_size;
-            player->img.shipDest.w *= win->pixel_size;
-            player->img.shipDest.h *= win->pixel_size;
-            player->img.flameDest.x *= win->pixel_size;
-            player->img.flameDest.y *= win->pixel_size;
-            player->img.flameDest.w *= win->pixel_size;
-            player->img.flameDest.h *= win->pixel_size;
+            player->img.shipDest.x *= win->pixelSize;
+            player->img.shipDest.y *= win->pixelSize;
+            player->img.shipDest.w *= win->pixelSize;
+            player->img.shipDest.h *= win->pixelSize;
+            player->img.flameDest.x *= win->pixelSize;
+            player->img.flameDest.y *= win->pixelSize;
+            player->img.flameDest.w *= win->pixelSize;
+            player->img.flameDest.h *= win->pixelSize;
         } else if (win->mode == SDL_WINDOW_FULLSCREEN_DESKTOP) {
             SDL_SetWindowFullscreen(win->ptr, 0);
             win->mode = 0;
@@ -132,61 +132,19 @@ void doUpdates(Level *lvl, Window *win) {
             win->w = 960; // TODO hardcoded
             win->h = 540; // TODO hardcoded
 
-            player->img.shipDest.x /= win->pixel_size;
-            player->img.shipDest.y /= win->pixel_size;
-            player->img.shipDest.w /= win->pixel_size;
-            player->img.shipDest.h /= win->pixel_size;
-            player->img.flameDest.x /= win->pixel_size;
-            player->img.flameDest.y /= win->pixel_size;
-            player->img.flameDest.w /= win->pixel_size;
-            player->img.flameDest.h /= win->pixel_size;
+            player->img.shipDest.x /= win->pixelSize;
+            player->img.shipDest.y /= win->pixelSize;
+            player->img.shipDest.w /= win->pixelSize;
+            player->img.shipDest.h /= win->pixelSize;
+            player->img.flameDest.x /= win->pixelSize;
+            player->img.flameDest.y /= win->pixelSize;
+            player->img.flameDest.w /= win->pixelSize;
+            player->img.flameDest.h /= win->pixelSize;
 
-            win->pixel_size = 1; // TODO hardcoded
+            win->pixelSize = 1; // TODO hardcoded
         }
     }
 
-    // general game state updates
-    updateLevel(lvl, win);
-    
-    // place player (and bullets?) on screen
-    player->img.shipDest.x =
-        ((int)player->location.x - lvl->src.x) * win->pixel_size;
-    player->img.flameDest.x = player->img.shipDest.x - (8 * win->pixel_size);
-    player->img.shipDest.y =
-        ((int)player->location.y - lvl->src.y) * win->pixel_size;
-    player->img.flameDest.y = player->img.shipDest.y;
-
-    // instead of move player right move level left at 0.25 screen width
-    if ((player->img.shipDest.x > win->q1w &&
-         player->location.x < lvl->w - win->q1w &&
-         player->location.x < lvl->w - win->q3w) ||
-        // also when moving left beyond 0.25 screen witdh in the level
-        (player->img.shipDest.x < win->q1w && player->location.x > win->q1w)) {
-
-        int diff = player->img.shipDest.x - win->q1w;
-        // if it's a big change, make it happen in steps so it's not as jarring
-        if (abs(diff) > 5) {
-            diff = diff / 5;
-        }
-        player->img.shipDest.x -= diff;
-        player->img.flameDest.x = player->img.shipDest.x - 8;
-        lvl->src.x += diff;
-    }
-
-    // move level up instead of player down at 0.75 screen height
-    if (player->img.shipDest.y > win->q3h &&
-        player->location.y < lvl->h - win->q1h) {
-        int diff = player->img.shipDest.y - win->q3h;
-        player->img.shipDest.y = win->q3h;
-        player->img.flameDest.y = win->q3h;
-        lvl->src.y += diff;
-    }
-
-    // move level down instead of player up at 0.25 screen height
-    if (player->img.shipDest.y < win->q1h && player->location.y > win->q1h) {
-        int diff = player->img.shipDest.y - win->q1h;
-        player->img.shipDest.y = win->q1h;
-        player->img.flameDest.y = win->q1h;
-        lvl->src.y += diff;
-    }
+    // then update the level and everything inside it
+    updateLevel(lvl);
 }

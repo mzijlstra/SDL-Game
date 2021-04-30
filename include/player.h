@@ -60,6 +60,7 @@ typedef struct Player {
     PlayerAnim anim;
     PlayerImage img;
     LinkNode bulletList;
+    SDL_Rect view;
 } Player;
 
 void initPlayer(Player *player, Window * win);

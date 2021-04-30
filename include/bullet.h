@@ -19,6 +19,6 @@ typedef struct Bullet {
 } Bullet;
 
 void initBullet(Bullet *const bullet, Player *const player);
-int updateBullet(Bullet *const bullet, Level *const lvl);
+int updateBullet(Bullet *const bullet);
 
 #endif
