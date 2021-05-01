@@ -4,7 +4,7 @@
 #include "window.h"
 
 typedef struct Assets {
-    SDL_Surface *bg_tiles;
+    SDL_Surface *bgTiles;
     SDL_Texture *ship;
     SDL_Texture *flame;
     SDL_Texture *bullet;

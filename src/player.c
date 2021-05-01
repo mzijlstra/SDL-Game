@@ -20,9 +20,9 @@ void initPlayer(Player *player, Window *win) {
     player->acceleration.boost = 1.3;
     player->velocity.x = 0;
     player->velocity.y = 0;
-    player->anim.up_count = 0;
-    player->anim.down_count = 0;
-    player->anim.boost_count = 0;
+    player->anim.upCount = 0;
+    player->anim.downCount = 0;
+    player->anim.boostCount = 0;
     player->anim.shipFrame = 2;
     player->anim.flameFrame = 0;
     player->img.ship = assets.ship;
@@ -74,18 +74,18 @@ void updatePlayer(Player *const player) {
         // move ship
         player->velocity.y -= player->acceleration.up;
         // tilt ship
-        player->anim.up_count += 1;
-        if (!player->anim.down_count && player->action.boost &&
-            player->action.right && player->anim.up_count > ANIM_TIME) {
+        player->anim.upCount += 1;
+        if (!player->anim.downCount && player->action.boost &&
+            player->action.right && player->anim.upCount > ANIM_TIME) {
             player->anim.shipFrame = 0;
-        } else if (player->anim.down_count) {
+        } else if (player->anim.downCount) {
             player->anim.shipFrame = 2;
         } else {
             player->anim.shipFrame = 1;
         }
     } else {
-        if (player->anim.up_count > 0) {
-            player->anim.up_count -= 1;
+        if (player->anim.upCount > 0) {
+            player->anim.upCount -= 1;
         }
     }
 
@@ -93,18 +93,18 @@ void updatePlayer(Player *const player) {
         // move ship
         player->velocity.y += player->acceleration.down;
         // tilt ship
-        player->anim.down_count += 1;
-        if (!player->anim.up_count && player->action.boost &&
-            player->action.right && player->anim.down_count > ANIM_TIME) {
+        player->anim.downCount += 1;
+        if (!player->anim.upCount && player->action.boost &&
+            player->action.right && player->anim.downCount > ANIM_TIME) {
             player->anim.shipFrame = 4;
-        } else if (player->anim.up_count) {
+        } else if (player->anim.upCount) {
             player->anim.shipFrame = 2;
         } else {
             player->anim.shipFrame = 3;
         }
     } else {
-        if (player->anim.down_count > 0) {
-            player->anim.down_count -= 1; // TODO act on this
+        if (player->anim.downCount > 0) {
+            player->anim.downCount -= 1; 
         }
     }
 
@@ -127,8 +127,8 @@ void updatePlayer(Player *const player) {
 
         // set ship flame
         if (player->action.boost) {
-            player->anim.boost_count += 1;
-            if (player->anim.boost_count % 10 == 0) {
+            player->anim.boostCount += 1;
+            if (player->anim.boostCount % 10 == 0) {
                 // every 100milli secs
                 player->anim.flameFrame += 1;
                 if (player->anim.flameFrame == 4) {

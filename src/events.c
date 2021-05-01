@@ -32,7 +32,7 @@ void getEvents(Level *lvl, Window *win) {
             case SDLK_UP:
             case SDLK_w:
                 p->action.up = SDL_TRUE;
-                p->anim.up_count = 0;
+                p->anim.upCount = 0;
                 break;
             case SDLK_RIGHT:
             case SDLK_d:
@@ -41,7 +41,7 @@ void getEvents(Level *lvl, Window *win) {
             case SDLK_DOWN:
             case SDLK_s:
                 p->action.down = SDL_TRUE;
-                p->anim.down_count = 0;
+                p->anim.downCount = 0;
                 break;
             case SDLK_LEFT:
             case SDLK_a:
@@ -49,7 +49,7 @@ void getEvents(Level *lvl, Window *win) {
                 break;
             case SDLK_TAB:
                 p->action.boost = SDL_TRUE;
-                p->anim.boost_count = 0;
+                p->anim.boostCount = 0;
                 break;
             case SDLK_SPACE:
                 p->action.fire = SDL_TRUE;
@@ -63,7 +63,7 @@ void getEvents(Level *lvl, Window *win) {
             case SDLK_UP:
             case SDLK_w:
                 p->action.up = SDL_FALSE;
-                p->anim.up_count = ANIM_TIME;
+                p->anim.upCount = ANIM_TIME;
                 break;
             case SDLK_RIGHT:
             case SDLK_d:
@@ -72,7 +72,7 @@ void getEvents(Level *lvl, Window *win) {
             case SDLK_DOWN:
             case SDLK_s:
                 p->action.down = SDL_FALSE;
-                p->anim.down_count = ANIM_TIME;
+                p->anim.downCount = ANIM_TIME;
                 break;
             case SDLK_LEFT:
             case SDLK_a:
@@ -80,7 +80,7 @@ void getEvents(Level *lvl, Window *win) {
                 break;
             case SDLK_TAB:
                 p->action.boost = SDL_FALSE;
-                p->anim.boost_count = 0;
+                p->anim.boostCount = 0;
                 break;
             case SDLK_SPACE:
                 p->action.fire = SDL_FALSE;

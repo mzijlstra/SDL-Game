@@ -7,12 +7,12 @@
 #define ANIM_TIME 15
 
 typedef struct Timing {
-    unsigned long frame_count;
+    unsigned long frameCount;
     unsigned int secs;
     unsigned int fps;
-    unsigned int start_time;
-    unsigned int frame_start;
-    unsigned int frame_stop;
+    unsigned int startTime;
+    unsigned int frameStart;
+    unsigned int frameStop;
 } Timing;
 
 void initTiming(Timing *timing);

@@ -28,7 +28,7 @@ void initLevel(Level *const lvl, Player *const p1, Window *const win) {
     lvl->p1 = p1;
 
     // create texture for level
-    SDL_Surface *tiles = assets.bg_tiles;
+    SDL_Surface *tiles = assets.bgTiles;
     SDL_Surface *img =
         SDL_CreateRGBSurface(0, mode.w, mode.h, 32, rmask, gmask, bmask, amask);
 

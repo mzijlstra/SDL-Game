@@ -45,7 +45,7 @@ SDL_Texture *loadTexture(char *asset, SDL_Renderer *ren) {
 
 
 void initAssets(Window* win) {
-    assets.bg_tiles =  IMG_Load("assets/desert-tiles.png");
+    assets.bgTiles =  IMG_Load("assets/desert-tiles.png");
     assets.ship = loadTexture("assets/ship-sheet.png", win->renderer);
     assets.flame = loadTexture("assets/flame-sheet.png", win->renderer);
     assets.bullet = loadTexture("assets/bullets.png", win->renderer);

@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
     initTiming(&timing);
 
     while (SDL_TRUE) {
-        timing.frame_start = SDL_GetTicks();
+        timing.frameStart = SDL_GetTicks();
         (*playLvl.getEvents)(&lvl, &win);
         if (p1.action.quit) {
             break;

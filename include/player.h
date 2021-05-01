@@ -36,9 +36,9 @@ typedef struct PlayerVelocity {
 } PlayerVelocity;
 
 typedef struct PlayerAnim {
-    unsigned int up_count;
-    unsigned int down_count;
-    unsigned int boost_count;
+    unsigned int upCount;
+    unsigned int downCount;
+    unsigned int boostCount;
     uint8_t shipFrame;
     uint8_t flameFrame;
 } PlayerAnim;
