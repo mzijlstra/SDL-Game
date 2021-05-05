@@ -15,7 +15,6 @@ typedef struct Bullet {
     unsigned int ttl;
     SDL_Texture *img;
     SDL_Rect imgSrc;
-    SDL_Rect imgDest;
 } Bullet;
 
 void initBullet(Bullet *const bullet, Player *const player);

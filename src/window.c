@@ -2,7 +2,6 @@
 
 void initWindow(Window *win) {
     win->mode = 0;
-    win->pixelSize = 1;
     // Start with basic size everyone should be able to display
     win->w = 640;
     win->h = 480;

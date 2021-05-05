@@ -9,6 +9,7 @@ void initPlayer(Player *player, Window *win) {
     player->action.left = SDL_FALSE;
     player->action.right = SDL_FALSE;
     player->action.boost = SDL_FALSE;
+    player->action.fire = SDL_FALSE;
     player->action.fullscreen = SDL_FALSE;
     player->action.quit = SDL_FALSE;
     player->location.x = 25;
@@ -31,25 +32,18 @@ void initPlayer(Player *player, Window *win) {
     player->img.shipSrc.y = 0;
     player->img.shipSrc.w = TILE_SIZE;
     player->img.shipSrc.h = TILE_SIZE;
-    player->img.shipDest.x = player->location.x * win->pixelSize;
-    player->img.shipDest.y = player->location.y * win->pixelSize;
-    player->img.shipDest.w = TILE_SIZE * win->pixelSize;
-    player->img.shipDest.h = TILE_SIZE * win->pixelSize;
     player->img.flameSrc.x = player->anim.flameFrame * TILE_SIZE;
     player->img.flameSrc.y = 0;
     player->img.flameSrc.w = TILE_SIZE;
     player->img.flameSrc.h = TILE_SIZE;
-    player->img.flameDest.x = (player->location.x - 9) * win->pixelSize;
-    player->img.flameDest.y = player->location.y * win->pixelSize;
-    player->img.flameDest.w = TILE_SIZE * win->pixelSize;
-    player->img.flameDest.h = TILE_SIZE * win->pixelSize;
     player->bulletList.next = &player->bulletList;
     player->bulletList.prev = &player->bulletList;
     player->bulletList.data = NULL; // this is the sentinel node
+    player->view.pixelSize = 1;
     player->view.x = 0;
     player->view.y = 0;
-    player->view.w = win->w / win->pixelSize;
-    player->view.h = win->h / win->pixelSize;
+    player->view.w = win->w / player->view.pixelSize;
+    player->view.h = win->h / player->view.pixelSize;
 }
 
 void updatePlayer(Player *const player) {
@@ -104,7 +98,7 @@ void updatePlayer(Player *const player) {
         }
     } else {
         if (player->anim.downCount > 0) {
-            player->anim.downCount -= 1; 
+            player->anim.downCount -= 1;
         }
     }
 
@@ -159,4 +153,16 @@ void updatePlayer(Player *const player) {
     // update player location
     player->location.x += player->velocity.x;
     player->location.y += player->velocity.y;
+}
+
+void setPixelSize(Player *const player, Window *const win, unsigned int size) { 
+    if (size < 1 || size > 5) {
+        return;
+    }
+
+    player->view.pixelSize = size;
+    // TODO also update view.x and view.y
+    player->view.w = win->w / player->view.pixelSize;
+    player->view.h = win->h / player->view.pixelSize;
+
 }

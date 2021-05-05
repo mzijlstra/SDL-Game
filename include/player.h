@@ -47,10 +47,16 @@ typedef struct PlayerImage {
     SDL_Texture *ship;
     SDL_Texture *flame;
     SDL_Rect shipSrc;
-    SDL_Rect shipDest;
     SDL_Rect flameSrc;
-    SDL_Rect flameDest;
 } PlayerImage;
+
+typedef struct PlayerView {
+    double x;
+    double y;
+    int w;
+    int h;
+    unsigned int pixelSize;
+} PlayerView;
 
 typedef struct Player {
     PlayerAction action;
@@ -60,10 +66,11 @@ typedef struct Player {
     PlayerAnim anim;
     PlayerImage img;
     LinkNode bulletList;
-    SDL_Rect view;
+    PlayerView view;
 } Player;
 
 void initPlayer(Player *player, Window * win);
 void updatePlayer(Player *const player);
+void setPixelSize(Player *const player, Window *const win, unsigned int size);
 
 #endif

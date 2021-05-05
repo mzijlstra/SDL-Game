@@ -8,7 +8,6 @@
 
 typedef struct Window {
     unsigned int mode;
-    unsigned int pixelSize;
     int w;
     int h;
     int q1w; // left quarter

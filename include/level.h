@@ -9,7 +9,6 @@ typedef struct Level {
     int h;
     Player *p1;
     SDL_Texture *img;
-    SDL_Rect view;
 } Level;
 
 void initLevel(Level *const lvl, Player *const p1, Window *const win);

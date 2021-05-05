@@ -16,8 +16,7 @@ void getEvents(Level *lvl, Window *win) {
                         event.window.data2);
 
                 windowSizeChanged(win, event.window.data1, event.window.data2);
-                lvl->p1->view.w = win->w / win->pixelSize;
-                lvl->p1->view.h = win->h / win->pixelSize;
+                setPixelSize(p, win, p->view.pixelSize);
                 break;
             }
             break;
@@ -60,6 +59,12 @@ void getEvents(Level *lvl, Window *win) {
 
         case SDL_KEYUP:
             switch (event.key.keysym.sym) {
+            case SDLK_EQUALS:
+                setPixelSize(p, win, p->view.pixelSize + 1); 
+                break;
+            case SDLK_MINUS:
+                setPixelSize(p, win, p->view.pixelSize - 1);
+                break;
             case SDLK_UP:
             case SDLK_w:
                 p->action.up = SDL_FALSE;
@@ -111,37 +116,18 @@ void doUpdates(Level *lvl, Window *win) {
         if (win->mode == 0) {
             SDL_SetWindowFullscreen(win->ptr, SDL_WINDOW_FULLSCREEN_DESKTOP);
             win->mode = SDL_WINDOW_FULLSCREEN_DESKTOP;
-            win->pixelSize = 4;
+            player->view.pixelSize = 4;
 
             SDL_GetWindowSize(win->ptr, &win->w, &win->h);
 
-            win->pixelSize = 2; // TODO hardcoded
-
-            player->img.shipDest.x *= win->pixelSize;
-            player->img.shipDest.y *= win->pixelSize;
-            player->img.shipDest.w *= win->pixelSize;
-            player->img.shipDest.h *= win->pixelSize;
-            player->img.flameDest.x *= win->pixelSize;
-            player->img.flameDest.y *= win->pixelSize;
-            player->img.flameDest.w *= win->pixelSize;
-            player->img.flameDest.h *= win->pixelSize;
+            player->view.pixelSize = 2; // TODO hardcoded
         } else if (win->mode == SDL_WINDOW_FULLSCREEN_DESKTOP) {
             SDL_SetWindowFullscreen(win->ptr, 0);
             win->mode = 0;
 
             win->w = 960; // TODO hardcoded
             win->h = 540; // TODO hardcoded
-
-            player->img.shipDest.x /= win->pixelSize;
-            player->img.shipDest.y /= win->pixelSize;
-            player->img.shipDest.w /= win->pixelSize;
-            player->img.shipDest.h /= win->pixelSize;
-            player->img.flameDest.x /= win->pixelSize;
-            player->img.flameDest.y /= win->pixelSize;
-            player->img.flameDest.w /= win->pixelSize;
-            player->img.flameDest.h /= win->pixelSize;
-
-            win->pixelSize = 1; // TODO hardcoded
+            player->view.pixelSize = 1; // TODO hardcoded
         }
     }
 

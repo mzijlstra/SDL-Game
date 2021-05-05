@@ -9,9 +9,9 @@ typedef struct LinkNode {
     void *data;
 } LinkNode;
 
-/* This will assume a cirular linked list with sentinel node */
+/* This assumes a cirular linked list with a sentinel node */
 void addLink(LinkNode *sentinel, void *data);
-/* This will assume that the data in the node has been freed already */
+/* This assumes that the data in the node has been freed already */
 void removeLink(LinkNode *node);
 
 #endif

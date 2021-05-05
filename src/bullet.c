@@ -15,10 +15,6 @@ void initBullet(Bullet *const bullet, Player *const player) {
     bullet->imgSrc.y = 0;
     bullet->imgSrc.w = 16;
     bullet->imgSrc.h = 16;
-    bullet->imgDest.x = player->img.shipSrc.x;
-    bullet->imgDest.y = player->img.shipSrc.y;
-    bullet->imgDest.w = 16;
-    bullet->imgDest.h = 16;
     addLink(&player->bulletList, bullet);
 }
 
