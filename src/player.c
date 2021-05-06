@@ -155,14 +155,20 @@ void updatePlayer(Player *const player) {
     player->location.y += player->velocity.y;
 }
 
-void setPixelSize(Player *const player, Window *const win, unsigned int size) { 
+void setPixelSize(Player *const player, Window *const win, unsigned int size) {
     if (size < 1 || size > 5) {
         return;
     }
 
     player->view.pixelSize = size;
-    // TODO also update view.x and view.y
     player->view.w = win->w / player->view.pixelSize;
     player->view.h = win->h / player->view.pixelSize;
 
+    // update view.y (player shouldn't disapear off the bottom)
+    int bottomView = player->view.y + player->view.h - TILE_SIZE * 5;
+    int diff = player->location.y - bottomView;
+    if (diff > 0) { // player is below the bottom
+        player->view.y += diff;
+    } 
+    // Is there ever a need to update view.x?
 }
