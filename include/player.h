@@ -58,6 +58,12 @@ typedef struct PlayerView {
     unsigned int pixelSize;
 } PlayerView;
 
+typedef struct PlayerAttack {
+    LinkNode bulletList;
+    unsigned int reloadSpeed;
+    unsigned int reloadCount;
+} PlayerAttack;
+
 typedef struct Player {
     PlayerAction action;
     PlayerLocation location;
@@ -65,8 +71,8 @@ typedef struct Player {
     PlayerVelocity velocity;
     PlayerAnim anim;
     PlayerImage img;
-    LinkNode bulletList;
     PlayerView view;
+    PlayerAttack attack;
 } Player;
 
 void initPlayer(Player *player, Window * win);

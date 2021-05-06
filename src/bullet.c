@@ -15,7 +15,7 @@ void initBullet(Bullet *const bullet, Player *const player) {
     bullet->imgSrc.y = 0;
     bullet->imgSrc.w = 16;
     bullet->imgSrc.h = 16;
-    addLink(&player->bulletList, bullet);
+    addLink(&player->attack.bulletList, bullet);
 }
 
 int updateBullet(Bullet *const bullet) { 

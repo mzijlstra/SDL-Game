@@ -36,27 +36,33 @@ void initPlayer(Player *player, Window *win) {
     player->img.flameSrc.y = 0;
     player->img.flameSrc.w = TILE_SIZE;
     player->img.flameSrc.h = TILE_SIZE;
-    player->bulletList.next = &player->bulletList;
-    player->bulletList.prev = &player->bulletList;
-    player->bulletList.data = NULL; // this is the sentinel node
     player->view.pixelSize = 1;
     player->view.x = 0;
     player->view.y = 0;
     player->view.w = win->w / player->view.pixelSize;
     player->view.h = win->h / player->view.pixelSize;
+    player->attack.reloadSpeed = 10;
+    player->attack.reloadCount = 0;
+    player->attack.bulletList.next = &player->attack.bulletList;
+    player->attack.bulletList.prev = &player->attack.bulletList;
+    player->attack.bulletList.data = NULL; // this is the sentinel node
+
 }
 
 void updatePlayer(Player *const player) {
     // create a bullet if the player is firing
-    if (player->action.fire) {
+    if (player->action.fire && player->attack.reloadCount == 0) {
         Bullet *bullet = malloc(sizeof(Bullet));
         initBullet(bullet, player);
+        player->attack.reloadCount = player->attack.reloadSpeed;
+    } else if (player->attack.reloadCount > 0) {
+        player->attack.reloadCount--;
     }
 
     // update player bullets
-    LinkNode *iter = player->bulletList.next;
+    LinkNode *iter = player->attack.bulletList.next;
     LinkNode *next = NULL;
-    while (iter != &player->bulletList) {
+    while (iter != &player->attack.bulletList) {
         next = iter->next;
         if (updateBullet(iter->data) == BULLET_DONE) {
             removeLink(iter);
