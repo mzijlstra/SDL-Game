@@ -76,11 +76,11 @@ void render(Window *win, Level *lvl) {
     SDL_RenderCopy(win->renderer, lvl->img, &src, &dst);
 
     // Draw player bullets
-    LinkNode *iter = lvl->p1->attack.bulletList.next;
+    LinkNode *iter = lvl->p1->gun.bulletList.next;
     SDL_Rect bltDest;
     bltDest.w = tls;
     bltDest.h = tls;
-    while (iter != &lvl->p1->attack.bulletList) {
+    while (iter != &lvl->p1->gun.bulletList) {
         Bullet *blt = (Bullet *)iter->data;
         bltDest.x = (blt->x - player->view.x) * pxs;
         bltDest.y = (blt->y - player->view.y) * pxs;

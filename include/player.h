@@ -28,6 +28,8 @@ typedef struct PlayerAcceleration {
     double left;
     double right;
     double boost;
+    double movEnergyUse;
+    double boostEnergyUse;
 } PlayerAcceleration;
 
 typedef struct PlayerVelocity {
@@ -58,11 +60,30 @@ typedef struct PlayerView {
     unsigned int pixelSize;
 } PlayerView;
 
-typedef struct PlayerAttack {
+typedef struct PlayerEnergy {
+    double generate;
+    double propulsePercent;
+    double shieldPercent;
+    double gunPercent;
+    double propulseReserve;
+    double shieldReserve;
+    double gunReserve;
+} PlayerEnergy;
+
+typedef struct PlayerShield {
+    double targetStrength;
+    double currentStrength;
+    double maintenanceUse;
+    double rechargeUse;
+    double strengthPerCharge;
+} PlayerShield;
+
+typedef struct PlayerGun {
     LinkNode bulletList;
     unsigned int reloadSpeed;
     unsigned int reloadCount;
-} PlayerAttack;
+    double energyUsePerShot;
+} PlayerGun;
 
 typedef struct Player {
     PlayerAction action;
@@ -72,7 +93,9 @@ typedef struct Player {
     PlayerAnim anim;
     PlayerImage img;
     PlayerView view;
-    PlayerAttack attack;
+    PlayerEnergy energy;
+    PlayerShield shield;
+    PlayerGun gun;
 } Player;
 
 void initPlayer(Player *player, Window * win);

@@ -19,6 +19,8 @@ void initPlayer(Player *player, Window *win) {
     player->acceleration.right = 0.3;
     player->acceleration.left = 0.3;
     player->acceleration.boost = 1.3;
+    player->acceleration.movEnergyUse = 1.0;
+    player->acceleration.boostEnergyUse = 5.0;
     player->velocity.x = 0;
     player->velocity.y = 0;
     player->anim.upCount = 0;
@@ -41,28 +43,40 @@ void initPlayer(Player *player, Window *win) {
     player->view.y = 0;
     player->view.w = win->w / player->view.pixelSize;
     player->view.h = win->h / player->view.pixelSize;
-    player->attack.reloadSpeed = 10;
-    player->attack.reloadCount = 0;
-    player->attack.bulletList.next = &player->attack.bulletList;
-    player->attack.bulletList.prev = &player->attack.bulletList;
-    player->attack.bulletList.data = NULL; // this is the sentinel node
-
+    player->energy.generate = 1.0;
+    player->energy.propulsePercent = 0.34;
+    player->energy.shieldPercent = 0.33;
+    player->energy.gunPercent = 0.33;
+    player->energy.propulseReserve = 250;
+    player->energy.shieldReserve = 250;
+    player->energy.gunReserve = 250;
+    player->shield.targetStrength = 100;
+    player->shield.currentStrength = 100;
+    player->shield.maintenanceUse = 0.5;
+    player->shield.rechargeUse = 2.0;
+    player->shield.strengthPerCharge = 0.5;
+    player->gun.reloadSpeed = 10;
+    player->gun.reloadCount = 0;
+    player->gun.energyUsePerShot = 20;
+    player->gun.bulletList.next = &player->gun.bulletList;
+    player->gun.bulletList.prev = &player->gun.bulletList;
+    player->gun.bulletList.data = NULL; // this is the sentinel node
 }
 
 void updatePlayer(Player *const player) {
     // create a bullet if the player is firing
-    if (player->action.fire && player->attack.reloadCount == 0) {
+    if (player->action.fire && player->gun.reloadCount == 0) {
         Bullet *bullet = malloc(sizeof(Bullet));
         initBullet(bullet, player);
-        player->attack.reloadCount = player->attack.reloadSpeed;
-    } else if (player->attack.reloadCount > 0) {
-        player->attack.reloadCount--;
+        player->gun.reloadCount = player->gun.reloadSpeed;
+    } else if (player->gun.reloadCount > 0) {
+        player->gun.reloadCount--;
     }
 
     // update player bullets
-    LinkNode *iter = player->attack.bulletList.next;
+    LinkNode *iter = player->gun.bulletList.next;
     LinkNode *next = NULL;
-    while (iter != &player->attack.bulletList) {
+    while (iter != &player->gun.bulletList) {
         next = iter->next;
         if (updateBullet(iter->data) == BULLET_DONE) {
             removeLink(iter);
