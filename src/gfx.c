@@ -64,6 +64,13 @@ void render(Window *win, Level *lvl) {
     flameDest.w = tls;
     flameDest.h = tls;
 
+    // place the shield
+    SDL_Rect shieldDest;
+    shieldDest.x = shipDest.x - (4 * pxs);
+    shieldDest.y = shipDest.y - (2 * pxs);
+    shieldDest.w = 20 * pxs;
+    shieldDest.h = 20 * pxs;
+
     // Draw the background
     SDL_Rect dst, src;
     dst.w = win->w;
@@ -94,6 +101,10 @@ void render(Window *win, Level *lvl) {
                    &shipDest);
     SDL_RenderCopy(win->renderer, player->img.flame, &player->img.flameSrc,
                    &flameDest);
+
+    // Draw the shield
+    SDL_RenderCopy(win->renderer, player->img.shield, &player->img.shieldSrc, 
+                    &shieldDest);
 
     // Update the screen
     SDL_RenderPresent(win->renderer);

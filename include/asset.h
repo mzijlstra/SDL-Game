@@ -8,7 +8,7 @@ typedef struct Assets {
     SDL_Texture *ship;
     SDL_Texture *flame;
     SDL_Texture *bullet;
-
+    SDL_Texture *shield;
 } Assets;
 
 

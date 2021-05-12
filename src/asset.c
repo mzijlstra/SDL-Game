@@ -49,4 +49,5 @@ void initAssets(Window* win) {
     assets.ship = loadTexture("assets/ship-sheet.png", win->renderer);
     assets.flame = loadTexture("assets/flame-sheet.png", win->renderer);
     assets.bullet = loadTexture("assets/bullets.png", win->renderer);
+    assets.shield = loadTexture("assets/shield-sheet.png", win->renderer);
 }

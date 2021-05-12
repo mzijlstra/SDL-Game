@@ -41,15 +41,19 @@ typedef struct PlayerAnim {
     unsigned int upCount;
     unsigned int downCount;
     unsigned int boostCount;
+    unsigned int shieldCount;
     uint8_t shipFrame;
     uint8_t flameFrame;
+    uint8_t shieldFrame;
 } PlayerAnim;
 
 typedef struct PlayerImage {
     SDL_Texture *ship;
     SDL_Texture *flame;
+    SDL_Texture *shield;
     SDL_Rect shipSrc;
     SDL_Rect flameSrc;
+    SDL_Rect shieldSrc;
 } PlayerImage;
 
 typedef struct PlayerView {

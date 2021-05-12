@@ -57,5 +57,8 @@ int main(int argc, char *argv[]) {
         (*playLvl.render)(&win, &lvl);
         (*playLvl.timeFrame)(&timing);
     }
+
+    SDL_DestroyRenderer(win.renderer);
+    SDL_DestroyWindow(win.ptr);
     return 0;
 }

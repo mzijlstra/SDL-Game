@@ -25,12 +25,12 @@ void initWindow(Window *win) {
         SDL_Log("SDL_GetDesktopDisplayMode failed: %s", SDL_GetError());
     }
 
-    SDL_Log("Desktop: %d x %d\n", mode.w, mode.h);
+    SDL_Log("Desktop: %dx%d\n", mode.w, mode.h);
 
     // set window size to 1/2 of desktop resolution
     windowSizeChanged(win, mode.w / 2, mode.h / 2);
     SDL_SetWindowSize(win->ptr, win->w, win->h);
-    SDL_Log("Set win size: %d %d\n", win->w, win->h);
+    SDL_Log("Set win size: %dx%d\n", win->w, win->h);
 
     // set window position to be in the middle of the desktop again
     SDL_SetWindowPosition(win->ptr, mode.w / 4, mode.h / 4);

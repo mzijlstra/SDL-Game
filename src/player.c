@@ -26,10 +26,13 @@ void initPlayer(Player *player, Window *win) {
     player->anim.upCount = 0;
     player->anim.downCount = 0;
     player->anim.boostCount = 0;
+    player->anim.shieldCount = 0;
     player->anim.shipFrame = 2;
     player->anim.flameFrame = 0;
+    player->anim.shieldFrame = 0;
     player->img.ship = assets.ship;
     player->img.flame = assets.flame;
+    player->img.shield = assets.shield;
     player->img.shipSrc.x = player->anim.shipFrame * TILE_SIZE;
     player->img.shipSrc.y = 0;
     player->img.shipSrc.w = TILE_SIZE;
@@ -38,6 +41,10 @@ void initPlayer(Player *player, Window *win) {
     player->img.flameSrc.y = 0;
     player->img.flameSrc.w = TILE_SIZE;
     player->img.flameSrc.h = TILE_SIZE;
+    player->img.shieldSrc.x = player->anim.shieldFrame * 20;
+    player->img.shieldSrc.y = 0;
+    player->img.shieldSrc.w = 20;
+    player->img.shieldSrc.h = 20;
     player->view.pixelSize = 1;
     player->view.x = 0;
     player->view.y = 0;
@@ -55,7 +62,7 @@ void initPlayer(Player *player, Window *win) {
     player->shield.maintenanceUse = 0.5;
     player->shield.rechargeUse = 2.0;
     player->shield.strengthPerCharge = 0.5;
-    player->gun.reloadSpeed = 10;
+    player->gun.reloadSpeed = 25;
     player->gun.reloadCount = 0;
     player->gun.energyUsePerShot = 20;
     player->gun.bulletList.next = &player->gun.bulletList;
@@ -64,6 +71,13 @@ void initPlayer(Player *player, Window *win) {
 }
 
 void updatePlayer(Player *const player) {
+    // update player shield
+    player->anim.shieldCount++;
+    if (player->anim.shieldCount >= 15) {
+        player->anim.shieldFrame = (player->anim.shieldFrame + 1) % 8;
+        player->anim.shieldCount = 0;
+    }
+
     // create a bullet if the player is firing
     if (player->action.fire && player->gun.reloadCount == 0) {
         Bullet *bullet = malloc(sizeof(Bullet));
@@ -159,6 +173,7 @@ void updatePlayer(Player *const player) {
     // adjust animation frames
     player->img.shipSrc.x = player->anim.shipFrame * TILE_SIZE;
     player->img.flameSrc.x = player->anim.flameFrame * TILE_SIZE;
+    player->img.shieldSrc.x = player->anim.shieldFrame * 20;
 
     // update velocity
     player->velocity.x = player->velocity.x * (1.0 - 0.2); // 0.2 is drag
