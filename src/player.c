@@ -45,7 +45,7 @@ void initPlayer(Player *player, Window *win) {
     player->img.shieldSrc.y = 0;
     player->img.shieldSrc.w = 20;
     player->img.shieldSrc.h = 20;
-    player->view.pixelSize = 1;
+    player->view.pixelSize = 4;
     player->view.x = 0;
     player->view.y = 0;
     player->view.w = win->w / player->view.pixelSize;
