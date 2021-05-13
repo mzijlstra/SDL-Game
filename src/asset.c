@@ -43,6 +43,10 @@ SDL_Texture *loadTexture(char *asset, SDL_Renderer *ren) {
     return tex;
 }
 
+void loadSound(char *asset, Sound *snd) {
+    SDL_LoadWAV(asset, &snd->wavSpec, &snd->wavBuffer, &snd->wavLength);
+}
+
 
 void initAssets(Window* win) {
     assets.bgTiles =  IMG_Load("assets/desert-tiles.png");
@@ -50,4 +54,14 @@ void initAssets(Window* win) {
     assets.flame = loadTexture("assets/flame-sheet.png", win->renderer);
     assets.bullet = loadTexture("assets/bullets.png", win->renderer);
     assets.shield = loadTexture("assets/shield-sheet.png", win->renderer);
+    loadSound("assets/shot.wav", &assets.shot);
+}
+
+void freeAssets() {
+    SDL_FreeSurface(assets.bgTiles);
+    SDL_DestroyTexture(assets.ship);
+    SDL_DestroyTexture(assets.flame);
+    SDL_DestroyTexture(assets.bullet);
+    SDL_DestroyTexture(assets.shield);
+    SDL_FreeWAV(assets.shot.wavBuffer);
 }

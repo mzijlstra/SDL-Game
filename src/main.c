@@ -58,7 +58,8 @@ int main(int argc, char *argv[]) {
         (*playLvl.timeFrame)(&timing);
     }
 
-    SDL_DestroyRenderer(win.renderer);
-    SDL_DestroyWindow(win.ptr);
+    destroyLevel(&lvl);
+    freeAssets();
+    destroyWindow(&win); 
     return 0;
 }

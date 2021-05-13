@@ -87,7 +87,6 @@ void initLevel(Level *const lvl, Player *const p1, Window *const win) {
     }
 
     lvl->img = SDL_CreateTextureFromSurface(win->renderer, img);
-    SDL_FreeSurface(tiles);
     SDL_FreeSurface(img);
 }
 
@@ -106,4 +105,8 @@ void updateLevel(Level *const lvl) {
     } else if (player->location.y > lvl->h - TILE_SIZE) {
         player->location.y = lvl->h - TILE_SIZE;
     }
+}
+
+void destroyLevel(Level *const lvl) {
+    SDL_DestroyTexture(lvl->img);
 }

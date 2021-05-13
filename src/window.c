@@ -1,6 +1,9 @@
 #include "window.h"
+#include "asset.h"
 
-void initWindow(Window *win) {
+extern Assets assets;
+
+void initWindow(Window *const win) {
     win->mode = 0;
     // Start with basic size everyone should be able to display
     win->w = 640;
@@ -43,13 +46,33 @@ void initWindow(Window *win) {
         exit(1);
     }
     SDL_DisableScreenSaver();
+
+    SDL_AudioSpec want;
+    uint8_t *wavBuffer;
+    uint32_t wavLength;
+    SDL_LoadWAV("assets/shot.wav", &want, &wavBuffer, &wavLength);
+    SDL_FreeWAV(wavBuffer);
+
+    assets.audioDeviceId = SDL_OpenAudioDevice(NULL, 0, &want, NULL,
+                                               SDL_AUDIO_ALLOW_FORMAT_CHANGE);
+    if (assets.audioDeviceId == 0) {
+        SDL_Log("Failed to open audio %s", SDL_GetError());
+        exit(1);
+    }
+    SDL_PauseAudioDevice(assets.audioDeviceId, 0);
 }
 
-void windowSizeChanged(Window *win, int w, int h) {
+void windowSizeChanged(Window *const win, int w, int h) {
     win->w = w;
     win->h = h;
     win->q1w = win->w * 0.25;
     win->q3w = win->w - win->q1w;
     win->q1h = win->h * 0.25;
     win->q3h = win->h - win->q1h;
+}
+
+void destroyWindow(Window *const win) {
+    SDL_CloseAudio();
+    SDL_DestroyRenderer(win->renderer);
+    SDL_DestroyWindow(win->ptr);
 }

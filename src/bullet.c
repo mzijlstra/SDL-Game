@@ -16,9 +16,13 @@ void initBullet(Bullet *const bullet, Player *const player) {
     bullet->imgSrc.w = 16;
     bullet->imgSrc.h = 16;
     addLink(&player->gun.bulletList, bullet);
+
+    // play 'shot' sound
+    SDL_QueueAudio(assets.audioDeviceId, assets.shot.wavBuffer,
+                   assets.shot.wavLength);
 }
 
-int updateBullet(Bullet *const bullet) { 
+int updateBullet(Bullet *const bullet) {
     bullet->x += bullet->dx;
     bullet->y += bullet->dy;
     bullet->ttl--;

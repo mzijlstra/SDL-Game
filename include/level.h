@@ -13,5 +13,6 @@ typedef struct Level {
 
 void initLevel(Level *const lvl, Player *const p1, Window *const win);
 void updateLevel(Level *const lvl);
+void destroyLevel(Level *const lvl);
 
 #endif
