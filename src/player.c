@@ -1,7 +1,7 @@
 #include "player.h"
 #include "bullet.h"
 
-extern Assets assets;
+extern Asset asset;
 
 void initPlayer(Player *player, Window *win) {
     player->action.up = SDL_FALSE;
@@ -30,9 +30,9 @@ void initPlayer(Player *player, Window *win) {
     player->anim.shipFrame = 2;
     player->anim.flameFrame = 0;
     player->anim.shieldFrame = 0;
-    player->img.ship = assets.ship;
-    player->img.flame = assets.flame;
-    player->img.shield = assets.shield;
+    player->img.ship = asset.ship;
+    player->img.flame = asset.flame;
+    player->img.shield = asset.shield;
     player->img.shipSrc.x = player->anim.shipFrame * TILE_SIZE;
     player->img.shipSrc.y = 0;
     player->img.shipSrc.w = TILE_SIZE;
@@ -62,7 +62,7 @@ void initPlayer(Player *player, Window *win) {
     player->shield.maintenanceUse = 0.5;
     player->shield.rechargeUse = 2.0;
     player->shield.strengthPerCharge = 0.5;
-    player->gun.reloadSpeed = 25;
+    player->gun.reloadSpeed = 20;
     player->gun.reloadCount = 0;
     player->gun.energyUsePerShot = 20;
     player->gun.bulletList.next = &player->gun.bulletList;
@@ -80,7 +80,7 @@ void updatePlayer(Player *const player) {
 
     // create a bullet if the player is firing
     if (player->action.fire && player->gun.reloadCount == 0) {
-        Bullet *bullet = malloc(sizeof(Bullet));
+        Bullet *bullet = SDL_malloc(sizeof(Bullet));
         initBullet(bullet, player);
         player->gun.reloadCount = player->gun.reloadSpeed;
     } else if (player->gun.reloadCount > 0) {

@@ -1,8 +1,9 @@
 #include "linkedlist.h"
+#include <SDL2/SDL.h>
 
 /* This will assume a cirular linked list with sentinel node */
 void addLink(LinkNode *sentinel, void *data) {
-    LinkNode *node = malloc(sizeof(LinkNode));
+    LinkNode *node = SDL_malloc(sizeof(LinkNode));
     node->data = data;
     node->prev = sentinel;
     node->next = sentinel->next;
@@ -15,5 +16,5 @@ void addLink(LinkNode *sentinel, void *data) {
 void removeLink(LinkNode *node) {
     node->prev->next = node->next;
     node->next->prev = node->prev;
-    free(node);
+    SDL_free(node);
 }

@@ -1,6 +1,6 @@
 #include "asset.h"
 
-extern Assets assets;
+extern Asset asset;
 
 SDL_Texture *loadTexture(char *asset, SDL_Renderer *ren) {
     SDL_Texture *tex = NULL;
@@ -43,25 +43,25 @@ SDL_Texture *loadTexture(char *asset, SDL_Renderer *ren) {
     return tex;
 }
 
-void loadSound(char *asset, Sound *snd) {
-    SDL_LoadWAV(asset, &snd->wavSpec, &snd->wavBuffer, &snd->wavLength);
+void loadWAV(char *asset, WAV *snd) { 
+    SDL_LoadWAV(asset, &snd->spec, &snd->buf, &snd->len);
 }
 
 
-void initAssets(Window* win) {
-    assets.bgTiles =  IMG_Load("assets/desert-tiles.png");
-    assets.ship = loadTexture("assets/ship-sheet.png", win->renderer);
-    assets.flame = loadTexture("assets/flame-sheet.png", win->renderer);
-    assets.bullet = loadTexture("assets/bullets.png", win->renderer);
-    assets.shield = loadTexture("assets/shield-sheet.png", win->renderer);
-    loadSound("assets/shot.wav", &assets.shot);
+void loadAssets(Window* win) {
+    asset.bgTiles =  IMG_Load("assets/img/desert-tiles.png");
+    asset.ship = loadTexture("assets/img/ship-sheet.png", win->renderer);
+    asset.flame = loadTexture("assets/img/flame-sheet.png", win->renderer);
+    asset.bullet = loadTexture("assets/img/bullets.png", win->renderer);
+    asset.shield = loadTexture("assets/img/shield-sheet.png", win->renderer);
+    loadWAV("assets/snd/shot.wav", &asset.shot);
 }
 
 void freeAssets() {
-    SDL_FreeSurface(assets.bgTiles);
-    SDL_DestroyTexture(assets.ship);
-    SDL_DestroyTexture(assets.flame);
-    SDL_DestroyTexture(assets.bullet);
-    SDL_DestroyTexture(assets.shield);
-    SDL_FreeWAV(assets.shot.wavBuffer);
+    SDL_FreeSurface(asset.bgTiles);
+    SDL_DestroyTexture(asset.ship);
+    SDL_DestroyTexture(asset.flame);
+    SDL_DestroyTexture(asset.bullet);
+    SDL_DestroyTexture(asset.shield);
+    SDL_FreeWAV(asset.shot.buf);
 }

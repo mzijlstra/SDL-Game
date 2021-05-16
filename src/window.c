@@ -1,7 +1,9 @@
 #include "window.h"
 #include "asset.h"
+#include "audio.h"
 
-extern Assets assets;
+extern Asset asset;
+extern LinkNode sfxList; 
 
 void initWindow(Window *const win) {
     win->mode = 0;
@@ -47,19 +49,7 @@ void initWindow(Window *const win) {
     }
     SDL_DisableScreenSaver();
 
-    SDL_AudioSpec want;
-    uint8_t *wavBuffer;
-    uint32_t wavLength;
-    SDL_LoadWAV("assets/shot.wav", &want, &wavBuffer, &wavLength);
-    SDL_FreeWAV(wavBuffer);
-
-    assets.audioDeviceId = SDL_OpenAudioDevice(NULL, 0, &want, NULL,
-                                               SDL_AUDIO_ALLOW_FORMAT_CHANGE);
-    if (assets.audioDeviceId == 0) {
-        SDL_Log("Failed to open audio %s", SDL_GetError());
-        exit(1);
-    }
-    SDL_PauseAudioDevice(assets.audioDeviceId, 0);
+    initAudio();
 }
 
 void windowSizeChanged(Window *const win, int w, int h) {

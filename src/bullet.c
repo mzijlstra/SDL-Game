@@ -1,8 +1,9 @@
 #include "bullet.h"
 #include "asset.h"
 #include "linkedlist.h"
+#include "audio.h"
 
-extern Assets assets;
+extern Asset asset;
 
 void initBullet(Bullet *const bullet, Player *const player) {
     bullet->x = player->location.x;
@@ -10,7 +11,7 @@ void initBullet(Bullet *const bullet, Player *const player) {
     bullet->dx = player->velocity.x + 5;
     bullet->dy = 0;
     bullet->ttl = 250;
-    bullet->img = assets.bullet;
+    bullet->img = asset.bullet;
     bullet->imgSrc.x = 0;
     bullet->imgSrc.y = 0;
     bullet->imgSrc.w = 16;
@@ -18,8 +19,7 @@ void initBullet(Bullet *const bullet, Player *const player) {
     addLink(&player->gun.bulletList, bullet);
 
     // play 'shot' sound
-    SDL_QueueAudio(assets.audioDeviceId, assets.shot.wavBuffer,
-                   assets.shot.wavLength);
+    playSound(&asset.shot);
 }
 
 int updateBullet(Bullet *const bullet) {
@@ -27,7 +27,7 @@ int updateBullet(Bullet *const bullet) {
     bullet->y += bullet->dy;
     bullet->ttl--;
     if (bullet->ttl <= 0) {
-        free(bullet);
+        SDL_free(bullet);
         return BULLET_DONE;
     }
     return BULLET_GOING;

@@ -8,19 +8,21 @@
 #include "level.h"
 #include "player.h"
 #include "timing.h"
+#include "linkedlist.h"
 #include "events.h"
 #include "gfx.h"
+#include "audio.h"
 #include "state.h"
 
 // global variables
-SDL_bool show_fps;
-Assets assets;
+SDL_bool showFPS;
+Asset asset;
 
 static void argFPS(int argc, char *argv[]) {
-    show_fps = SDL_FALSE;
+    showFPS = SDL_FALSE;
     for (int i = 1; i < argc; i++) {
         if (strcmp("fps", argv[i]) == 0) {
-            show_fps = SDL_TRUE;
+            showFPS = SDL_TRUE;
         }
     }
 }
@@ -32,7 +34,7 @@ int main(int argc, char *argv[]) {
 
     Window win;
     initWindow(&win);
-    initAssets(&win);
+    loadAssets(&win);
 
     Level lvl;
     Player p1;

@@ -13,7 +13,7 @@ unsigned int bmask = 0x00ff0000;
 unsigned int amask = 0xff000000;
 #endif
 
-extern Assets assets;
+extern Asset asset;
 
 void initLevel(Level *const lvl, Player *const p1, Window *const win) {
     SDL_DisplayMode mode;
@@ -28,7 +28,7 @@ void initLevel(Level *const lvl, Player *const p1, Window *const win) {
     lvl->p1 = p1;
 
     // create texture for level
-    SDL_Surface *tiles = assets.bgTiles;
+    SDL_Surface *tiles = asset.bgTiles;
     SDL_Surface *img =
         SDL_CreateRGBSurface(0, mode.w, mode.h, 32, rmask, gmask, bmask, amask);
 

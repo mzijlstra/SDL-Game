@@ -1,6 +1,6 @@
 #include "timing.h"
 
-extern SDL_bool show_fps;
+extern SDL_bool showFPS;
 
 void initTiming(Timing *timing) {
     timing->frameCount = 0;
@@ -25,7 +25,7 @@ void timeFrame(Timing *t) {
     t->fps += 1;
     if ((t->frameStop - t->startTime) / 1000 > t->secs) {
         t->secs += 1;
-        if (show_fps) {
+        if (showFPS) {
             SDL_Log("FPS: %d\n", t->fps);
         }
         t->fps = 0;
