@@ -54,7 +54,7 @@ void loadAssets(Window* win) {
     asset.flame = loadTexture("assets/img/flame-sheet.png", win->renderer);
     asset.bullet = loadTexture("assets/img/bullets.png", win->renderer);
     asset.shield = loadTexture("assets/img/shield-sheet.png", win->renderer);
-    loadWAV("assets/snd/shot.wav", &asset.shot);
+    loadWAV("assets/snd/shoot.wav", &asset.shot);
 }
 
 void freeAssets() {

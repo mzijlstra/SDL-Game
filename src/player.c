@@ -62,7 +62,7 @@ void initPlayer(Player *player, Window *win) {
     player->shield.maintenanceUse = 0.5;
     player->shield.rechargeUse = 2.0;
     player->shield.strengthPerCharge = 0.5;
-    player->gun.reloadSpeed = 20;
+    player->gun.reloadSpeed = 15;
     player->gun.reloadCount = 0;
     player->gun.energyUsePerShot = 20;
     player->gun.bulletList.next = &player->gun.bulletList;
