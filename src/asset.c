@@ -1,3 +1,4 @@
+#include <SDL2/SDL_mixer.h>
 #include "asset.h"
 
 extern Asset asset;
@@ -43,18 +44,13 @@ SDL_Texture *loadTexture(char *asset, SDL_Renderer *ren) {
     return tex;
 }
 
-void loadWAV(char *asset, WAV *snd) { 
-    SDL_LoadWAV(asset, &snd->spec, &snd->buf, &snd->len);
-}
-
-
 void loadAssets(Window* win) {
     asset.bgTiles =  IMG_Load("assets/img/desert-tiles.png");
     asset.ship = loadTexture("assets/img/ship-sheet.png", win->renderer);
     asset.flame = loadTexture("assets/img/flame-sheet.png", win->renderer);
     asset.bullet = loadTexture("assets/img/bullets.png", win->renderer);
     asset.shield = loadTexture("assets/img/shield-sheet.png", win->renderer);
-    loadWAV("assets/snd/shoot.wav", &asset.shot);
+    asset.shoot = Mix_LoadWAV("assets/snd/shoot.wav");
 }
 
 void freeAssets() {
@@ -63,5 +59,5 @@ void freeAssets() {
     SDL_DestroyTexture(asset.flame);
     SDL_DestroyTexture(asset.bullet);
     SDL_DestroyTexture(asset.shield);
-    SDL_FreeWAV(asset.shot.buf);
+    Mix_FreeChunk(asset.shoot); 
 }

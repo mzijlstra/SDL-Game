@@ -19,7 +19,7 @@ void initBullet(Bullet *const bullet, Player *const player) {
     addLink(&player->gun.bulletList, bullet);
 
     // play 'shot' sound
-    playSound(&asset.shot);
+    playSound(asset.shoot);
 }
 
 int updateBullet(Bullet *const bullet) {

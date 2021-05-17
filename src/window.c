@@ -62,7 +62,8 @@ void windowSizeChanged(Window *const win, int w, int h) {
 }
 
 void destroyWindow(Window *const win) {
-    SDL_CloseAudio();
+    Mix_CloseAudio();
+    Mix_Quit();
     SDL_DestroyRenderer(win->renderer);
     SDL_DestroyWindow(win->ptr);
 }
