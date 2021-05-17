@@ -13,6 +13,8 @@ typedef struct Bullet {
     double dx;
     double dy;
     unsigned int ttl;
+    unsigned int animCount;
+    uint8_t frame;
     SDL_Texture *img;
     SDL_Rect imgSrc;
 } Bullet;
