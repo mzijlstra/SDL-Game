@@ -1,5 +1,6 @@
 #include "player.h"
 #include "bullet.h"
+#include <math.h>
 
 extern Asset asset;
 
