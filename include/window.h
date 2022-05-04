@@ -18,8 +18,8 @@ typedef struct Window {
     SDL_Renderer *renderer;
 } Window;
 
-void initWindow(Window *const win);
+void windowConstructor(Window *const win);
 void windowSizeChanged(Window *const win, int w, int h);
-void destroyWindow(Window *const win);
+void windowDestructor(Window *const win);
 
 #endif

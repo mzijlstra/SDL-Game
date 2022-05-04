@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
     }
 
     Window win;
-    initWindow(&win);
+    windowConstructor(&win);
     loadAssets(&win);
 
     Level lvl;
@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
     initTiming(&timing);
 
     while (SDL_TRUE) {
-        timing.frameStart = SDL_GetTicks();
+        timing.frameStart = SDL_GetTicks64();
         (*playLvl.getEvents)(&lvl, &win);
         if (p1.action.quit) {
             break;
@@ -62,6 +62,6 @@ int main(int argc, char *argv[]) {
 
     destroyLevel(&lvl);
     freeAssets();
-    destroyWindow(&win); 
+    windowDestructor(&win); 
     return 0;
 }

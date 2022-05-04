@@ -10,9 +10,9 @@ typedef struct Timing {
     unsigned long frameCount;
     unsigned int secs;
     unsigned int fps;
-    unsigned int startTime;
-    unsigned int frameStart;
-    unsigned int frameStop;
+    Uint64 startTime;
+    Uint64 frameStart;
+    Uint64 frameStop;
 } Timing;
 
 void initTiming(Timing *timing);

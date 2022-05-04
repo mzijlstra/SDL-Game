@@ -5,7 +5,8 @@
 extern Asset asset;
 extern LinkNode sfxList; 
 
-void initWindow(Window *const win) {
+void windowConstructor(Window *const win) {
+    SDL_zero(*win);
     win->mode = 0;
     // Start with basic size everyone should be able to display
     win->w = 640;
@@ -61,7 +62,7 @@ void windowSizeChanged(Window *const win, int w, int h) {
     win->q3h = win->h - win->q1h;
 }
 
-void destroyWindow(Window *const win) {
+void windowDestructor(Window *const win) {
     Mix_CloseAudio();
     Mix_Quit();
     SDL_DestroyRenderer(win->renderer);
