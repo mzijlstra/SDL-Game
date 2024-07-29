@@ -1,6 +1,4 @@
-#include "window.h"
-#include "asset.h"
-#include "audio.h"
+#include "game.h"
 
 extern Asset asset;
 extern LinkNode sfxList; 
@@ -17,9 +15,9 @@ void initWindow(Window *const win) {
     }
     atexit(SDL_Quit);
 
-    win->ptr = SDL_CreateWindow("Hover Gun Racer", SDL_WINDOWPOS_CENTERED,
+    win->ptr = SDL_CreateWindow("Core Ctrlr", SDL_WINDOWPOS_CENTERED,
                                 SDL_WINDOWPOS_CENTERED, win->w, win->h,
-                                SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+                                SDL_WINDOW_SHOWN);
     if (win->ptr == NULL) {
         SDL_Log("SDL_CreateWindow Error: %s\n", SDL_GetError());
         exit(1);

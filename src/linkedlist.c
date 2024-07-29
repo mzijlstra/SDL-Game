@@ -1,4 +1,4 @@
-#include "linkedlist.h"
+#include "game.h"
 #include <SDL2/SDL.h>
 
 /* This will assume a cirular linked list with sentinel node */

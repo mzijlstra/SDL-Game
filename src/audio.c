@@ -1,4 +1,4 @@
-#include "audio.h"
+#include "game.h"
 
 void initAudio() {
     Mix_Init(0);

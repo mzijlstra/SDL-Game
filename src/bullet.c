@@ -1,17 +1,13 @@
-#include "window.h"
-#include "bullet.h"
-#include "asset.h"
-#include "linkedlist.h"
-#include "audio.h"
+#include "game.h"
 
 extern Asset asset;
 
 void initBullet(Bullet *const bullet, Player *const player) {
     bullet->x = player->location.x;
     bullet->y = player->location.y;
-    bullet->dx = player->velocity.x + 5;
+    bullet->dx = 8;
     bullet->dy = 0;
-    bullet->ttl = 250;
+    bullet->ttl = 100;
     bullet->animCount = 10;
     bullet->frame = 0;
     bullet->img = asset.bullet;

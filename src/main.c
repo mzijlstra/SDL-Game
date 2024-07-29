@@ -3,16 +3,7 @@
 #include <SDL2/SDL_mixer.h>
 #include <string.h>
 
-#include "window.h"
-#include "asset.h"
-#include "level.h"
-#include "player.h"
-#include "timing.h"
-#include "linkedlist.h"
-#include "events.h"
-#include "gfx.h"
-#include "audio.h"
-#include "state.h"
+#include "game.h"
 
 // global variables
 SDL_bool showFPS;

@@ -1,5 +1,4 @@
-#include "gfx.h"
-#include "bullet.h"
+#include "game.h"
 
 void render(Window *win, Level *lvl) {
     Player *player = lvl->p1;

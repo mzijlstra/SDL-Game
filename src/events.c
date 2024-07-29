@@ -1,4 +1,4 @@
-#include "events.h"
+#include "game.h"
 
 void getEvents(Level *lvl, Window *win) {
     Player *p = lvl->p1;
@@ -16,7 +16,6 @@ void getEvents(Level *lvl, Window *win) {
                         event.window.data2);
 
                 windowSizeChanged(win, event.window.data1, event.window.data2);
-                setPixelSize(p, win, p->view.pixelSize);
                 break;
             }
             break;
@@ -114,20 +113,14 @@ void doUpdates(Level *lvl, Window *win) {
         player->action.fullscreen = SDL_FALSE;
 
         if (win->mode == 0) {
-            SDL_SetWindowFullscreen(win->ptr, SDL_WINDOW_FULLSCREEN_DESKTOP);
-            win->mode = SDL_WINDOW_FULLSCREEN_DESKTOP;
-            player->view.pixelSize = 4;
-
+            SDL_SetWindowFullscreen(win->ptr, SDL_WINDOW_FULLSCREEN);
+            win->mode = SDL_WINDOW_FULLSCREEN;
             SDL_GetWindowSize(win->ptr, &win->w, &win->h);
-
-            player->view.pixelSize = 2; // TODO hardcoded
-        } else if (win->mode == SDL_WINDOW_FULLSCREEN_DESKTOP) {
-            SDL_SetWindowFullscreen(win->ptr, 0);
+            SDL_Log("Fullscreen Window size to %dx%d", win->w, win->h);
+            windowSizeChanged(win, win->w, win->h);
+        } else if (win->mode == SDL_WINDOW_FULLSCREEN) {
+            SDL_SetWindowFullscreen(win->ptr, 0); // set windowed mode
             win->mode = 0;
-
-            win->w = 960; // TODO hardcoded
-            win->h = 540; // TODO hardcoded
-            player->view.pixelSize = 1; // TODO hardcoded
         }
     }
 

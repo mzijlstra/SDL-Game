@@ -1,5 +1,4 @@
-#include "player.h"
-#include "bullet.h"
+#include "game.h"
 #include <math.h>
 
 extern Asset asset;
@@ -19,7 +18,7 @@ void initPlayer(Player *player, Window *win) {
     player->acceleration.down = 0.3;
     player->acceleration.right = 0.3;
     player->acceleration.left = 0.3;
-    player->acceleration.boost = 1.3;
+    player->acceleration.boost = 0.6;
     player->acceleration.movEnergyUse = 1.0;
     player->acceleration.boostEnergyUse = 5.0;
     player->velocity.x = 0;
@@ -46,7 +45,7 @@ void initPlayer(Player *player, Window *win) {
     player->img.shieldSrc.y = 0;
     player->img.shieldSrc.w = 20;
     player->img.shieldSrc.h = 20;
-    player->view.pixelSize = 4;
+    player->view.pixelSize = 3;
     player->view.x = 0;
     player->view.y = 0;
     player->view.w = win->w / player->view.pixelSize;
