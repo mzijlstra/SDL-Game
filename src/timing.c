@@ -6,18 +6,18 @@ void initTiming(Timing *timing) {
     timing->frameCount = 0;
     timing->secs = 0;
     timing->fps = 0;
-    timing->startTime = SDL_GetTicks();
+    timing->startTime = SDL_GetTicks64();
 }
 
 void timeFrame(Timing *t) {
-    t->frameStop = SDL_GetTicks();
+    t->frameStop = SDL_GetTicks64();
     unsigned int target_frames = (t->frameStop - t->startTime) / FRAME_TIME;
 
     // only pause if we're on track for 100 fps
     if (t->frameCount >= target_frames) {
         while (t->frameStop - t->frameStart < FRAME_TIME) {
             SDL_Delay(1);
-            t->frameStop = SDL_GetTicks();
+            t->frameStop = SDL_GetTicks64();
         }
     }
 
@@ -31,6 +31,6 @@ void timeFrame(Timing *t) {
         t->fps = 0;
     }
     if (t->frameStop - t->frameStart > FRAME_TIME + 2) {
-        SDL_Log("Big Frame: %d millisecs\n", t->frameStop - t->frameStart);
+        SDL_Log("Big Frame: %d millisecs\n", (int) (t->frameStop - t->frameStart));
     }
 }
